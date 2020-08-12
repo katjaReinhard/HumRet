@@ -1,12 +1,11 @@
-%chirp cntrst start: 11500:20000
 clear
 close all
-
+clc
 %% pathes etc
 path1='C:\Users\katja\OneDrive - imec\HumRet';
 pathcode = 'C:\Users\katja\OneDrive - imec\HumRet\_scripts';
 pathColor = 'F:\LabCode\Matlab\Plots\cmocean_v1.4\cmocean';
-pathSave = 'C:\Users\katja\OneDrive - imec\HumRet\PlosOne';
+pathSave = 'C:\Users\katja\OneDrive - imec\HumanRetina\PlosOne';
 
 %% load
 addpath(genpath(pathcode))
@@ -25,20 +24,12 @@ fsize1 = 7; fsize2 = 9; fsize3 = 10;
 ctr_edg = [-1 1];
 sp_edg = [0.6 4.2];
 
+spat=[4000 2000 1000 500 200 100];
+freq=[1 2 4 8 ];
 %% colors
 CC = 10;
 order = [4 7 8 3 5 6 2 9 1 10];
 CLUSTER_INFO = zeros(CC,20,5);%mean,median,min max, std
-
-% figure
-% clrs = colormap('hsv');
-% close
-% clrs = clrs(1:floor(256/CC):end,:);
-
-
-% clrs = cmocean('phase',CC);
-
-
 
 clrs = [166,206,227;31,120,180;178,223,138;51,160,44;251,154,153;227,26,28;...
     253,191,111;255,127,0;202,178,214;106,61,154];
@@ -106,7 +97,23 @@ for x = 1:CC
     strt=strt+7;
 end
 
-axes('position',[0.08 0.92 0.8 0.02])
+cnt = 0;
+for x = 1:6
+    cnt = cnt + 1;
+    tx = text(x,4.7,int2str(spat(cnt)),'fontname','Arial','fontsize',fsize1,'horizontalalignment','right');
+    set(tx,'rotation',90)
+end
+tx = text(6.5,5.1,'\mum','fontname','Arial','fontsize',fsize1);
+
+
+cnt = 0;
+for x = 4:-1:1
+    cnt = cnt + 1;
+    tx = text(0.4,x,int2str(freq(cnt)),'fontname','Arial','fontsize',fsize1,'horizontalalignment','right');
+end
+text(-1.7,2.5,'Hz','fontname','Arial','fontsize',fsize1)
+
+axes('position',[0.08 0.9 0.8 0.02])
 for x = 1:CC
     plot(x,length(find(CL==x)),'o','markersize',5,'markerfacecolor',clrs(x,:),'markeredgecolor',clrs(x,:))
     hold on
@@ -120,7 +127,7 @@ ylabel('# cells','fontname','Arial','fontsize',fsize1)
 load(fullfile(path1,'h_normPeaks'))
 togoDG = togo;
 
-axes('position',[0.05 0.31 0.15 0.15])
+axes('position',[0.05 0.275 0.15 0.15])
 hold off
 normP = normPeaks(:,:,2);
 
@@ -140,12 +147,12 @@ end
 set(gca,'plotboxaspectratio',[1 1 1])
 set(gca,'xtick',1:6,'xticklabel',[4000 2000 1000 500 200 100],...
     'ytick',1:4,'yticklabel',[1 2 4 8])
-xlabel('\mum','fontname','Arial','fontsize',fsize2)
-ylabel('Hz','fontname','Arial','fontsize',fsize2)
+xlabel('\mum (4B)','fontname','Arial','fontsize',fsize2)
+ylabel('Hz (4C)','fontname','Arial','fontsize',fsize2)
 axis([sp_edg 0.8 4.2])
 xtickangle(90)
 %% contrast vs preferred SF
-axes('position',[0.29 0.31 0.15 0.15])
+axes('position',[0.29 0.275 0.15 0.15])
 [chirpFFTnorm,chirpAmp,freqSmoothChrp,togoChrp]=get_ChirpFFTnorm(path1,info);
 
 rangeF = length(chirpAmp)-chirpAmp(1);
@@ -192,13 +199,13 @@ end
 set(gca,'plotboxaspectratio',[1 1 1])
 set(gca,'xtick',1:6,'xticklabel',[4000 2000 1000 500 200 100],...
     'ytick',-1:0.5:1)
-xlabel('\mum','fontname','Arial','fontsize',fsize2)
-ylabel('contrast pref. index','fontname','Arial','fontsize',fsize2)
+xlabel('\mum (4B)','fontname','Arial','fontsize',fsize2)
+ylabel('contrast pref. index (4E)','fontname','Arial','fontsize',fsize2)
 xtickangle(90)
 axis([sp_edg ctr_edg])
 %% contrast vs TF
 
-axes('position',[0.51 0.31 0.15 0.15])
+axes('position',[0.51 0.275 0.15 0.15])
 % scatter(5-cY(idd),cntrstIDX(idc),10,[0.7 0.7 0.7]);
 hold on
 for cc = 1:CC
@@ -220,11 +227,11 @@ end
 set(gca,'plotboxaspectratio',[1 1 1])
 set(gca,'xtick',1:4,'xticklabel',[1 2 4 8],...
     'ytick',-1:0.5:1)
-xlabel('Hz','fontname','Arial','fontsize',fsize2)
-ylabel('contrast pref. index','fontname','Arial','fontsize',fsize2)
+xlabel('Hz (4C)','fontname','Arial','fontsize',fsize2)
+ylabel('contrast pref. index (4E)','fontname','Arial','fontsize',fsize2)
 axis([0.8 4.2 ctr_edg])
 %% contrast vs broadness of SF/TF
-axes('position',[0.75 0.31 0.15 0.15])
+axes('position',[0.75 0.275 0.15 0.15])
 % scatter((dX(idd)+dY(idd))./2,cntrstIDX(idc),10,[0.7 0.7 0.7]);
 hold on
 for cc = 1:CC
@@ -247,15 +254,15 @@ axis([0 4 ctr_edg])
 set(gca,'plotboxaspectratio',[1 1 1])
 set(gca,'xtick',1:4,...
     'ytick',[-1:0.5:1])
-xlabel('width of S-T resp.','fontname','Arial','fontsize',fsize2)
-ylabel('contrast pref. index','fontname','Arial','fontsize',fsize2)
+xlabel('width of S-T resp. (4D)','fontname','Arial','fontsize',fsize2)
+ylabel('contrast pref. index (4E)','fontname','Arial','fontsize',fsize2)
 %% cluster info
 SUPER_COLL = zeros(length(togoDG),20);
 SUPER_COLL(:,1) = togoDG;
 SUPER_COLL(:,2) = CL;
 % --- spatial ----
 SP = unique(spat); FR =unique(freq);
-ax1 = axes('position',[0.08 0.81 0.8 0.035])
+ax1 = axes('position',[0.08 0.78 0.8 0.035])
 for cc = 1:CC
     tmp = find(CL==cc);
     dat = cX(tmp);
@@ -278,46 +285,51 @@ for cc = 1:CC
     CLUSTER_INFO(cc,2,3)=min(dat2);%mean,median,min max, std
     CLUSTER_INFO(cc,2,4)=max(dat2);%mean,median,min max, std
     CLUSTER_INFO(cc,2,5)=std(dat2);%mean,median,min max, std
-    scatter(repmat(cc,1,length(dat2)),dat2,10,clrs(cc,:))
+    plotSpread(dat2,'distributionIdx',repmat(cc,length(dat2),1),'distributionMarkers',{'.'},'distributionColors',{clrs(cc,:)})
+    %     scatter(repmat(cc,1,length(dat2)),dat2,10,clrs(cc,:))
     hold on
-    plot([cc-0.2 cc+0.2],[median(dat2) median(dat2)],'-','color',clrs(cc,:),'linewidth',3)
+    plot([cc-0.3 cc+0.3],[median(dat2) median(dat2)],'-','color',clrs(cc,:),'linewidth',1)
     
 end
+set(gca,'xtick',1:10,'xticklabel',1:10,'fontname','Arial','fontsize',fsize2)
 axis([0.5 CC+0.5 0 4000])
 box off
 ylabel('\mum','fontname','Arial','fontsize',fsize2)
-axes('position',[0.08 0.856 0.8 0.005])
+axes('position',[0.08 0.826 0.8 0.005])
 text(0,0,'spatial frequency preference','fontname','Arial','fontsize',fsize2)
 axis off
 box off
 
 
 % --- broadness ----
-ax4 = axes('position',[0.08 0.745 0.8 0.035])
+ax3 = axes('position',[0.08 0.65 0.8 0.035])
 for cc = 1:CC
     tmp = find(CL==cc);
     dat2 = (dX(tmp)+dY(tmp))./2;
-    SUPER_COLL(tmp,6) = dat2;
-    scatter(repmat(cc,1,length(dat2)),dat2,10,clrs(cc,:))
+    SUPER_COLL(tmp,5) = dat2;
+    %     scatter(repmat(cc,1,length(dat2)),dat2,10,clrs(cc,:))
+    plotSpread(dat2,'distributionIdx',repmat(cc,length(dat2),1),'distributionMarkers',{'.'},'distributionColors',{clrs(cc,:)})
     hold on
-    plot([cc-0.2 cc+0.2],[median(dat2) median(dat2)],'-','color',clrs(cc,:),'linewidth',3)
+    plot([cc-0.3 cc+0.3],[median(dat2) median(dat2)],'-','color',clrs(cc,:),'linewidth',1)
     CLUSTER_INFO(cc,3,1)=mean(dat2);%mean,median,min max, std
     CLUSTER_INFO(cc,3,2)=median(dat2);%mean,median,min max, std
     CLUSTER_INFO(cc,3,3)=min(dat2);%mean,median,min max, std
     CLUSTER_INFO(cc,3,4)=max(dat2);%mean,median,min max, std
     CLUSTER_INFO(cc,3,5)=std(dat2);%mean,median,min max, std
 end
+set(gca,'xtick',1:10,'xticklabel',1:10,'fontname','Arial','fontsize',fsize2)
 axis([0.5 CC+0.5 0 4])
 box off
 ylabel('a.u.','fontname','Arial','fontsize',fsize2)
-axes('position',[0.08 0.791 0.8 0.005])
+axes('position',[0.08 0.695 0.8 0.005])
 text(0,0,'width of spatio-temporal response','fontname','Arial','fontsize',fsize2)
 axis off
 box off
 
 
 % --- temporal ----
-ax2 = axes('position',[0.08 0.68 0.8 0.035])
+ax2 = axes('position',[0.08 0.715 0.8 0.035])
+
 for cc = 1:CC
     tmp = find(CL==cc);
     dat = 5-cY(tmp);
@@ -335,25 +347,27 @@ for cc = 1:CC
         end
     end
     SUPER_COLL(tmp,4) = dat2;
-    scatter(repmat(cc,1,length(dat2)),dat2,10,clrs(cc,:))
+    plotSpread(dat2,'distributionIdx',repmat(cc,length(dat2),1),'distributionMarkers',{'.'},'distributionColors',{clrs(cc,:)})
+    %     scatter(repmat(cc,1,length(dat2)),dat2,10,clrs(cc,:))
     hold on
-    plot([cc-0.2 cc+0.2],[median(dat2) median(dat2)],'-','color',clrs(cc,:),'linewidth',3)
+    plot([cc-0.3 cc+0.3],[median(dat2) median(dat2)],'-','color',clrs(cc,:),'linewidth',1)
     CLUSTER_INFO(cc,4,1)=mean(dat2);%mean,median,min max, std
     CLUSTER_INFO(cc,4,2)=median(dat2);%mean,median,min max, std
     CLUSTER_INFO(cc,4,3)=min(dat2);%mean,median,min max, std
     CLUSTER_INFO(cc,4,4)=max(dat2);%mean,median,min max, std
     CLUSTER_INFO(cc,4,5)=std(dat2);%mean,median,min max, std
 end
+set(gca,'xtick',1:10,'xticklabel',1:10,'fontname','Arial','fontsize',fsize2)
 axis([0.5 CC+0.5 0 8])
 box off
 ylabel('Hz','fontname','Arial','fontsize',fsize2)
-axes('position',[0.08 0.725 0.8 0.005])
+axes('position',[0.08 0.76 0.8 0.005])
 text(0,0,'temporal frequency preference','fontname','Arial','fontsize',fsize2)
 axis off
 box off
 
 % --- contrast ----
-ax3 = axes('position',[0.08 0.615 0.8 0.035])
+ax4 = axes('position',[0.08 0.585 0.8 0.035])
 for cc = 1:CC
     tmp = find(CL==cc);
     dat = togoDG(tmp);
@@ -366,11 +380,13 @@ for cc = 1:CC
             dat2 = [dat2;tmp2];
         end
     end
-    SUPER_COLL(tmp(tk),5) = cntrstIDX(dat2);
+    SUPER_COLL(tmp(tk),6) = cntrstIDX(dat2);
     if ~isempty(dat2)
-        scatter(repmat(cc,1,length(dat2)),cntrstIDX(dat2),10,clrs(cc,:))
+        %         scatter(repmat(cc,1,length(dat2)),cntrstIDX(dat2),10,clrs(cc,:))
+        plotSpread(cntrstIDX(dat2),'distributionIdx',repmat(cc,length(dat2),1),'distributionMarkers',{'.'},'distributionColors',{clrs(cc,:)})
+        
         hold on
-        plot([cc-0.2 cc+0.2],[median(cntrstIDX(dat2)) median(cntrstIDX(dat2))],'-','color',clrs(cc,:),'linewidth',3)
+        plot([cc-0.3 cc+0.3],[median(cntrstIDX(dat2)) median(cntrstIDX(dat2))],'-','color',clrs(cc,:),'linewidth',1)
         CLUSTER_INFO(cc,5,1)=mean(cntrstIDX(dat2));%mean,median,min max, std
         CLUSTER_INFO(cc,5,2)=median(cntrstIDX(dat2));%mean,median,min max, std
         CLUSTER_INFO(cc,5,3)=min(cntrstIDX(dat2));%mean,median,min max, std
@@ -378,10 +394,11 @@ for cc = 1:CC
         CLUSTER_INFO(cc,5,5)=std(cntrstIDX(dat2));%mean,median,min max, std
     end
 end
+set(gca,'xtick',1:10,'xticklabel',1:10,'fontname','Arial','fontsize',fsize2)
 axis([0.5 CC+0.5 -1 1])
 box off
 ylabel('a.u.','fontname','Arial','fontsize',fsize2)
-axes('position',[0.08 0.655 0.8 0.005])
+axes('position',[0.08 0.63 0.8 0.005])
 text(0,0,'contrast preference index','fontname','Arial','fontsize',fsize2)
 axis off
 box off
@@ -389,7 +406,7 @@ box off
 
 
 % ----ON-OFF----
-ax5 = axes('position',[0.08 0.55 0.8 0.035])
+ax5 = axes('position',[0.08 0.52 0.8 0.035])
 for cc = 1:CC
     tmpo = find(CL==cc);
     ids = togoDG(tmpo);
@@ -398,11 +415,11 @@ for cc = 1:CC
     if ~isempty(flsh)
         tmp = find(flsh==-1);
         CLUSTER_INFO(cc,6,1)=length(tmp);%mean,median,min max, std
-        rectangle('position',[cc-0.3 0 0.2 100./length(tmpo).*length(tmp)],'edgecolor',clrs(cc,:),'facecolor','w')
+        rectangle('position',[cc-0.3 0 0.2 100./length(tmpo).*length(tmp)],'edgecolor',clrs(cc,:),'facecolor',clrs(cc,:))
         hold on
         tmp = find(flsh==1);
         CLUSTER_INFO(cc,6,2)=length(tmp);%mean,median,min max, std
-        rectangle('position',[cc-0.1 0 0.2 100./length(tmpo).*length(tmp)],'edgecolor',clrs(cc,:),'facecolor',clrs(cc,:))
+        rectangle('position',[cc-0.1 0 0.2 100./length(tmpo).*length(tmp)],'edgecolor',clrs(cc,:),'facecolor','w')
         tmp = find(flsh==2);
         CLUSTER_INFO(cc,6,3)=length(tmp);%mean,median,min max, std
         rectangle('position',[cc+0.1 0 0.2 100./length(tmpo).*length(tmp)],'edgecolor',clrs(cc,:),'facecolor',[clrs(cc,:) 0.3])
@@ -412,22 +429,23 @@ for cc = 1:CC
     end
     
 end
-rectangle('position',[7.5 40 0.2 10],'edgecolor','k','facecolor','w')
+rectangle('position',[7.5 40 0.2 10],'edgecolor','k','facecolor','k')
 text(7.75,45,'OFF','fontname','Arial','fontsize',fsize1)
-rectangle('position',[8.5 40 0.2 10],'edgecolor','k','facecolor','k')
+rectangle('position',[8.5 40 0.2 10],'edgecolor','k','facecolor','w')
 text(8.75,45,'ON','fontname','Arial','fontsize',fsize1)
 rectangle('position',[9.5 40 0.2 10],'edgecolor','k','facecolor',[0 0 0 0.3])
 text(9.75,45,'ON-OFF','fontname','Arial','fontsize',fsize1)
+set(gca,'xtick',1:10,'xticklabel',1:10,'fontname','Arial','fontsize',fsize2)
 axis([0.5 CC+0.5 0 52])
 box off
 ylabel('%','fontname','Arial','fontsize',fsize2)
-axes('position',[0.08 0.595 0.8 0.005])
+axes('position',[0.08 0.565 0.8 0.005])
 text(0,0,'polarity (OFF, ON, ON-OFF)','fontname','Arial','fontsize',fsize2)
 axis off
 box off
 
 %----transiency----
-ax6 = axes('position',[0.08 0.48 0.8 0.035])
+ax6 = axes('position',[0.08 0.45 0.8 0.035])
 load(fullfile(path1,'h_flashSpikes'))
 for cc = 1:CC
     tmpo = find(CL==cc);
@@ -464,9 +482,11 @@ for cc = 1:CC
             end
         end
     end
-    scatter(repmat(cc,1,length(trans)),trans,10,clrs(cc,:))
+    plotSpread(trans,'distributionIdx',repmat(cc,length(trans),1),'distributionMarkers',{'.'},'distributionColors',{clrs(cc,:)})
+    
+    %     scatter(repmat(cc,1,length(trans)),trans,10,clrs(cc,:))
     hold on
-    plot([cc-0.2 cc+0.2],[median(trans) median(trans)],'-','color',clrs(cc,:),'linewidth',3)
+    plot([cc-0.3 cc+0.3],[median(trans) median(trans)],'-','color',clrs(cc,:),'linewidth',1)
     
     CLUSTER_INFO(cc,7,1)=mean(trans);%mean,median,min max, std
     CLUSTER_INFO(cc,7,2)=median(trans);%mean,median,min max, std
@@ -474,15 +494,19 @@ for cc = 1:CC
     CLUSTER_INFO(cc,7,4)=max(trans);%mean,median,min max, std
     CLUSTER_INFO(cc,7,5)=std(trans);%mean,median,min max, std
 end
+set(gca,'xtick',1:10,'xticklabel',1:10,'fontname','Arial','fontsize',fsize2)
 axis([0.5 CC+0.5 0 1020])
 box off
 ylabel('ms','fontname','Arial','fontsize',fsize2)
-axes('position',[0.08 0.525 0.8 0.005])
+axes('position',[0.08 0.495 0.8 0.005])
 text(0,0,'transiency of flash response','fontname','Arial','fontsize',fsize2)
 axis off
 box off
 %% label example cells
-ex_names = {'A1','A2','A3','A4','A5','B1','B2','B3','B4','B5','B6','B7','C1','C2','C3'};
+% ex_names = {'A1','A2','A3','A4','A5','B1','B2','B3','B4','B5','B6','B7','C1','C2','C3'};
+ex_names = {'A_{1}','A_{2}','A_{3}','A_{4}','A_{5}',...
+    'B_{1}','B_{2}','B_{3}','B_{4}','B_{5}','B_{6}','B_{7}','C_{1}','C_{2}','C_{3}'};
+
 counter = zeros(15,1);
 for ii = 1:length(COLL_ID)
     inow = COLL_ID(ii);
@@ -493,15 +517,15 @@ for ii = 1:length(COLL_ID)
         eval(['currAX=ax',int2str(aa),';'])
         if cl == 6
             if counter(cl) == 1
-                plot(currAX,cl,SUPER_COLL(pos,aa+2),'ok','markerfacecolor','none','markersize',4);
+                plot(currAX,cl-0.2,SUPER_COLL(pos,aa+2),'ok','markerfacecolor','k','markersize',4);
             elseif counter(cl) == 2
-                plot(currAX,cl,SUPER_COLL(pos,aa+2),'^k','markerfacecolor','none','markersize',4);
+                plot(currAX,cl-0.1,SUPER_COLL(pos,aa+2),'^k','markerfacecolor','k','markersize',4);
             elseif counter(cl) == 3
-                plot(currAX,cl,SUPER_COLL(pos,aa+2),'sk','markerfacecolor','none','markersize',4);
+                plot(currAX,cl,SUPER_COLL(pos,aa+2),'sk','markerfacecolor','k','markersize',4);
             elseif counter(cl) == 4
-                plot(currAX,cl,SUPER_COLL(pos,aa+2),'o','markerfacecolor','none','markeredgecolor',[0.6 0.6 0.6],'markersize',4,'linewidth',1);
+                plot(currAX,cl+0.1,SUPER_COLL(pos,aa+2),'o','markerfacecolor','none','markeredgecolor','k','markersize',4,'linewidth',1);
             elseif counter(cl) == 5
-                plot(currAX,cl,SUPER_COLL(pos,aa+2),'^','markerfacecolor','none','markeredgecolor',[0.6 0.6 0.6],'markersize',4,'linewidth',1);
+                plot(currAX,cl+0.2,SUPER_COLL(pos,aa+2),'^','markerfacecolor','none','markeredgecolor','k','markersize',4,'linewidth',1);
             end
         elseif  counter(cl) == 1
             plot(currAX,cl,SUPER_COLL(pos,aa+2),'ok','markerfacecolor','k','markersize',4);
@@ -513,9 +537,10 @@ for ii = 1:length(COLL_ID)
 end
 save(fullfile(path1,'EXAMPLE_INFO'),'SUPER_COLL','CLUSTER_INFO')
 %% label example cell names
-axes('position',[0.08 0.87 0.8 0.028])
+axes('position',[0.08 0.84 0.8 0.04])
 list_label = {'o','^','s','o','^'};
-list_color = [0 0 0;0 0 0;0 0 0;0.6 0.6 0.6; 0.6 0.6 0.6];
+list_color = [0 0 0;0 0 0;0 0 0;0 0 0;0 0 0;0 0 0];
+list_size = [4 4 4 4 4];
 counter = zeros(15,1);
 for ii = 1:length(COLL_ID)
     inow = COLL_ID(ii);
@@ -524,115 +549,120 @@ for ii = 1:length(COLL_ID)
     counter(cl) = counter(cl)+1;
     
     if cl == 6
-        plot(cl,0.95-(0.23*counter(cl)-1),list_label{counter(cl)},'markeredgecolor',list_color(counter(cl),:),...
-            'markerfacecolor','none','markersize',4)
+        if counter<4
+        plot(cl,0.95-(0.25*counter(cl)-1),list_label{counter(cl)},'markeredgecolor',list_color(counter(cl),:),...
+            'markerfacecolor','k','markersize',list_size(counter(cl)))
+        else
+            plot(cl,0.95-(0.25*counter(cl)-1),list_label{counter(cl)},'markeredgecolor',list_color(counter(cl),:),...
+            'markerfacecolor','none','markersize',list_size(counter(cl)))
+        end
         hold on
-        text(cl+0.1,0.95-(0.23*counter(cl)-1),ex_names{ii},'fontname','Arial','fontsize',fsize1)
+        text(cl+0.1,0.95-(0.25*counter(cl)-1),ex_names{ii},'fontname','Arial','fontsize',fsize1)
     elseif counter(cl) == 1
-        plot(cl,0.95-(0.23*counter(cl)-1),'ok','markerfacecolor','k','markersize',4)
+        plot(cl,0.95-(0.25*counter(cl)-1),'ok','markerfacecolor','k','markersize',4)
         hold on
-        text(cl+0.1,0.95-(0.23*counter(cl)-1),ex_names{ii},'fontname','Arial','fontsize',fsize1)
+        text(cl+0.1,0.95-(0.25*counter(cl)-1),ex_names{ii},'fontname','Arial','fontsize',fsize1)
     elseif counter(cl) == 2
-        plot(cl,0.95-(0.23*counter(cl)-1),'ok','markerfacecolor','none','markersize',4)
+        plot(cl,0.95-(0.25*counter(cl)-1),'ok','markerfacecolor','none','markersize',4)
         hold on
-        text(cl+0.1,0.95-(0.23*counter(cl)-1),ex_names{ii},'fontname','Arial','fontsize',fsize1)
+        text(cl+0.1,0.95-(0.25*counter(cl)-1),ex_names{ii},'fontname','Arial','fontsize',fsize1)
     end
 end
 axis([0.5 CC+0.5 -inf inf])
 axis off
 box off
 %% letters
-axes('position',[ 0.01 0.985 0.01 0.01])
+axes('position',[ 0.01 0.99 0.01 0.01])
 text(0,0,'A','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 
 
-axes('position',[ 0.01 0.855 0.01 0.01])
+axes('position',[ 0.01 0.828 0.01 0.01])
 text(0,0,'B','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 
-axes('position',[ 0.01 0.795 0.01 0.01])
+axes('position',[ 0.01 0.76 0.01 0.01])
 text(0,0,'C','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 
-axes('position',[ 0.01 0.725 0.01 0.01])
+axes('position',[ 0.01 0.695 0.01 0.01])
 text(0,0,'D','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 
-axes('position',[ 0.01 0.66 0.01 0.01])
+axes('position',[ 0.01 0.63 0.01 0.01])
 text(0,0,'E','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 
-axes('position',[ 0.01 0.595 0.01 0.01])
+axes('position',[ 0.01 0.565 0.01 0.01])
 text(0,0,'F','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 
-axes('position',[ 0.01 0.53 0.01 0.01])
+axes('position',[ 0.01 0.497 0.01 0.01])
 text(0,0,'G','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 
-axes('position',[ 0.01 0.45 0.01 0.01])
+axes('position',[ 0.01 0.42 0.01 0.01])
 text(0,0,'H','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 
-axes('position',[ 0.24 0.45 0.01 0.01])
+axes('position',[ 0.24 0.42 0.01 0.01])
 text(0,0,'I','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 
-axes('position',[ 0.45 0.45 0.01 0.01])
+axes('position',[ 0.45 0.42 0.01 0.01])
 text(0,0,'J','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 
-axes('position',[ 0.7 0.45 0.01 0.01])
+axes('position',[ 0.7 0.42 0.01 0.01])
 text(0,0,'K','fontsize',fsize3,'fontweight','bold','fontname','Arial')
 set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
 box off
 %% find example cells
-clc
-midget = [10 6 4];%B5, B1, A4
-parasol = [1 3];
-others = [2 5 7 8 9 11:15];
-disp('----midget-----')
-for ii = 1:length(midget)
-    inow = midget(ii);
-    inow2 = COLL_ID(inow);
-    iddg = find(togoDG==inow2);
-    idch = find(togoChrp==inow2);
-    [~,mx] = max(normP(iddg,:));
-    disp([int2str(inow),' // ','contrastIDX: ',num2str(cntrstIDX(idch)),' | ',int2str(spat(mx)),'um, ',int2str(freq(mx)),'Hz',...
-        ' | ',num2str(7-cX(iddg)),'um, ',num2str(5-cY(iddg)),'Hz, | clust: ',int2str(CL(iddg))])
-end
-disp('----parasol-----')
-for ii = 1:length(parasol)
-    inow = parasol(ii);
-    inow2 = COLL_ID(inow);
-    iddg = find(togoDG==inow2);
-    idch = find(togoChrp==inow2);
-    [~,mx] = max(normP(iddg,:));
-    disp([int2str(inow),' // ','contrastIDX: ',num2str(cntrstIDX(idch)),' | ',int2str(spat(mx)),'um, ',int2str(freq(mx)),'Hz',...
-        ' | ',num2str(7-cX(iddg)),'um, ',num2str(5-cY(iddg)),'Hz, | clust: ',int2str(CL(iddg))])
-end
-
-disp('----others-----')
-for ii = 1:length(others)
-    inow = others(ii);
-    inow2 = COLL_ID(inow);
-    iddg = find(togoDG==inow2);
-    idch = find(togoChrp==inow2);
-    [~,mx] = max(normP(iddg,:));
-    disp([int2str(inow),' // ','contrastIDX: ',num2str(cntrstIDX(idch)),' | ',int2str(spat(mx)),'um, ',int2str(freq(mx)),'Hz',...
-        ' | ',num2str(7-cX(iddg)),'um, ',num2str(5-cY(iddg)),'Hz, | clust: ',int2str(CL(iddg))])
-end
+% clc
+% midget = [10 6 4];%B5, B1, A4
+% parasol = [1 3];
+% others = [2 5 7 8 9 11:15];
+% disp('----midget-----')
+% for ii = 1:length(midget)
+%     inow = midget(ii);
+%     inow2 = COLL_ID(inow);
+%     iddg = find(togoDG==inow2);
+%     idch = find(togoChrp==inow2);
+%     [~,mx] = max(normP(iddg,:));
+%     disp([int2str(inow),' // ','contrastIDX: ',num2str(cntrstIDX(idch)),' | ',int2str(spat(mx)),'um, ',int2str(freq(mx)),'Hz',...
+%         ' | ',num2str(7-cX(iddg)),'um, ',num2str(5-cY(iddg)),'Hz, | clust: ',int2str(CL(iddg))])
+% end
+% disp('----parasol-----')
+% for ii = 1:length(parasol)
+%     inow = parasol(ii);
+%     inow2 = COLL_ID(inow);
+%     iddg = find(togoDG==inow2);
+%     idch = find(togoChrp==inow2);
+%     [~,mx] = max(normP(iddg,:));
+%     disp([int2str(inow),' // ','contrastIDX: ',num2str(cntrstIDX(idch)),' | ',int2str(spat(mx)),'um, ',int2str(freq(mx)),'Hz',...
+%         ' | ',num2str(7-cX(iddg)),'um, ',num2str(5-cY(iddg)),'Hz, | clust: ',int2str(CL(iddg))])
+% end
+%
+% disp('----others-----')
+% for ii = 1:length(others)
+%     inow = others(ii);
+%     inow2 = COLL_ID(inow);
+%     iddg = find(togoDG==inow2);
+%     idch = find(togoChrp==inow2);
+%     [~,mx] = max(normP(iddg,:));
+%     disp([int2str(inow),' // ','contrastIDX: ',num2str(cntrstIDX(idch)),' | ',int2str(spat(mx)),'um, ',int2str(freq(mx)),'Hz',...
+%         ' | ',num2str(7-cX(iddg)),'um, ',num2str(5-cY(iddg)),'Hz, | clust: ',int2str(CL(iddg))])
+% end
 %%
 for ii = 1:length(COLL_ID)
     inow = COLL_ID(ii);
@@ -648,4 +678,6 @@ for c = 1:CC
 end
 %% save
 exportgraphics(gcf,fullfile(pathSave,'NEW_Fig5_types.png'),'Resolution',600)
-saveas(gcf,fullfile(pathSave,'NEW_Fig5_types.svg'))
+exportgraphics(gcf,fullfile(pathSave,'NEW_Fig5_types.tif'),'Resolution',600)
+
+% saveas(gcf,fullfile(pathSave,'NEW_Fig5_types.tif'))

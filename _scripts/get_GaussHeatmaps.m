@@ -80,7 +80,7 @@ for nn = 1:length(normDG)
     allClust = exp( - (aa*(Y-centerY).^2 + 2*bb*(Y-centerY).*(X-centerX2) + cc*(X-centerX2).^2)) ;
     
     allCenterX = [allCenterX;centerX]; allCenterY = [allCenterY;centerY];
-     dimX = [dimX;D(1)]; dimY = [dimY;D(1)];
+     dimX = [dimX;D(1)]; dimY = [dimY;D(2)];
     figure
     c = contour(X,Y,allClust(:,:),[0.5 0.5]);
     allContX{nn} = c(1,2:end);

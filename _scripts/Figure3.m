@@ -5,8 +5,8 @@ close all
 path1='C:\Users\katja\OneDrive - imec\HumRet';
 pathcode = 'C:\Users\katja\OneDrive - imec\HumRet\_scripts';
 pathColor = 'F:\LabCode\Matlab\Plots\othercolor';
-pathSave = 'C:\Users\katja\OneDrive - imec\HumRet\PlosOne';
-pathPanel = 'C:\Users\katja\OneDrive - imec\HumRet\PlosOne\stim';
+pathSave = 'C:\Users\katja\OneDrive - imec\HumanRetina\PlosOne';
+pathPanel = 'C:\Users\katja\OneDrive - imec\HumanRetina\PlosOne\stim';
 
 clrs = [166,206,227;31,120,180;178,223,138;51,160,44;251,154,153;227,26,28;...
     253,191,111;255,127,0;202,178,214;106,61,154];
@@ -433,8 +433,26 @@ for aa = 1:length(breaksat)
     box off
 end
 
+axes('position',[0.03 YY(2)-0.011 0.655 0.01])
+ plot([0 1],[0 0],'-','linewidth',0.5,'color',[0.4 0.4 0.4])
+    axis tight
+    axis off
+    box off
+    
+ 
+
+for aa = 3:length(YY)-1
+    if isempty(find(breaksat==aa))
+    axes('position',[0.03 YY(aa)-0.011 0.965 0.01])
+    plot([0 1],[0 0],'-','linewidth',0.5,'color',[0.4 0.4 0.4])
+    axis tight
+    axis off
+    box off
+    end
+end
+
 axes('position',[0.03 0.945 0.965 0.01])
-plot([0 1],[0 0],'-k','linewidth',1.5)
+plot([0 1],[0 0],'-k','linewidth',1.8)
 axis tight
 axis off
 box off
@@ -443,7 +461,7 @@ axes('position',[XX(1) YY(1)-0.015 W(1) 0.009])
 axis off
 box off
 plot([1 2],[1 1],'-k','linewidth',3)
-text(1.5,0.2,'1 second','horizontalalignment','center','fontsize',fsize1,'fontname','Arial')
+text(1.5,0.2,'2 seconds','horizontalalignment','center','fontsize',fsize1,'fontname','Arial')
 axis([1 4 0 1])
 box off
 axis off
@@ -490,19 +508,26 @@ axis([0 14 0 1])
 axis off
 box off
 %% letters
-ex_names = {'A1','A2','A3','A4','A5','B1','B2','B3','B4','B5','B6','B7','C1','C2','C3'};
+ex_names = {'A_{1}','A_{2}','A_{3}','A_{4}','A_{5}',...
+    'B_{1}','B_{2}','B_{3}','B_{4}','B_{5}','B_{6}','B_{7}','C_{1}','C_{2}','C_{3}'};
+% ex_names = {'A1','A2','A3','A4','A5','B1','B2','B3','B4','B5','B6','B7','C1','C2','C3'};
+
 ex_names = fliplr(ex_names);
 for ii = 1:length(COLL_ID)
     inow = COLL_ID(ii);
     iddg = find(SUPER_COLL(:,1)==inow);
+    pos =  YY(ii)+H-0.02;
+    if ii == 4 || ii == 11
+        pos = pos-0.01;
+    end
     if ~isempty(iddg)
         cln = SUPER_COLL(iddg,2);
-        axes('position',[0.025 YY(ii)+H-0.02  0.01 0.01])
+        axes('position',[0.025 pos  0.01 0.01])
         text(0,0,ex_names{ii},'fontsize',fsize3,'fontweight','bold','fontname','Arial','color',clrs(cln,:))
         set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
         box off
     else
-        axes('position',[0.025 YY(ii)+H-0.02  0.01 0.01])
+        axes('position',[0.025 pos  0.01 0.01])
         text(0,0,ex_names{ii},'fontsize',fsize3,'fontweight','bold','fontname','Arial','color','k')
         set(gca,'xtick',[],'ytick',[],'xcolor','w','ycolor','w')
         box off
@@ -510,4 +535,5 @@ for ii = 1:length(COLL_ID)
 end
 %% save
 exportgraphics(gcf,fullfile(pathSave,'NEW_Fig3_examples.png'),'Resolution',600)
-saveas(gcf,fullfile(pathSave,'NEW_Fig3_examples.svg'))
+exportgraphics(gcf,fullfile(pathSave,'NEW_Fig3_examples.tif'),'Resolution',600)
+% saveas(gcf,fullfile(pathSave,'NEW_Fig3_examples.tif'))
