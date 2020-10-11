@@ -535,5 +535,5 @@ for ii = 1:length(COLL_ID)
 end
 %% save
 exportgraphics(gcf,fullfile(pathSave,'NEW_Fig3_examples.png'),'Resolution',600)
-exportgraphics(gcf,fullfile(pathSave,'NEW_Fig3_examples.tif'),'Resolution',600)
+exportgraphics(gcf,fullfile(pathSave,'NEW_Fig3_examples.eps'),'Resolution',600)
 % saveas(gcf,fullfile(pathSave,'NEW_Fig3_examples.tif'))

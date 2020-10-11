@@ -678,6 +678,6 @@ for c = 1:CC
 end
 %% save
 exportgraphics(gcf,fullfile(pathSave,'NEW_Fig5_types.png'),'Resolution',600)
-exportgraphics(gcf,fullfile(pathSave,'NEW_Fig5_types.tif'),'Resolution',600)
+exportgraphics(gcf,fullfile(pathSave,'NEW_Fig5_types.eps'),'Resolution',600)
 
 % saveas(gcf,fullfile(pathSave,'NEW_Fig5_types.tif'))
