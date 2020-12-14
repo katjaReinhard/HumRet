@@ -325,13 +325,13 @@ else
     old = load(fullfile(path2,'Cowan2020'));
     load(fullfile(pathSave,'Cowan2020'))
     coords=cell(6,2);
-    coords{1,1} = c1(:,1);  coords{1,2} = c1(:,2);
+    coords{1,1} = c1(:,1);  coords{1,2} = c1(:,2); 
     coords{2,1} = c2(:,1);  coords{2,2} = c2(:,2);
-    coords{3,1} = c3(:,1);  coords{3,2} = c3(:,2);
-    coords{4,1} = c4(:,1);  coords{4,2} = c4(:,2);
-    coords{5,1} = c5(:,1);  coords{5,2} = c5(:,2);
+    coords{3,1} = c3(:,1);  coords{3,2} = c3(:,2); 
+    coords{4,1} = c4(:,1);  coords{4,2} = c4(:,2); 
+    coords{5,1} = c5(:,1);  coords{5,2} = c5(:,2); 
     coords{6,1} = old.coords{6,1};  coords{6,2} = old.coords{6,2};
-    coords2 = [];
+      coords2 = [];
     mi = 100; ma = 0;
     for c = 1:6
         mi = min(mi,coords{c,1}(1));
@@ -349,14 +349,14 @@ else
         [u1 u2] = unique(currx); currx = u1;
         curry = curry(u2);
         vq1 = resample(curry,length(xq),length(currx));
-        %         vq1 = interp1(currx,curry,xq);
-        %         tmp = find(isnan(vq1(1:2000)));
-        %         vq1(tmp) = vq1(tmp(end)+1);
-        %         tmp = find(isnan(vq1(25000:end)));
-        %         vq1(tmp) = vq1(tmp(1)-1);
+%         vq1 = interp1(currx,curry,xq);
+%         tmp = find(isnan(vq1(1:2000)));
+%         vq1(tmp) = vq1(tmp(end)+1);
+%         tmp = find(isnan(vq1(25000:end)));
+%         vq1(tmp) = vq1(tmp(1)-1);
         
-        %         vq2 = medfilt1(vq1(9700:24370),600);
-        %         vq1(9710:24360) = vq2(11:end-10);
+%         vq2 = medfilt1(vq1(9700:24370),600);
+%         vq1(9710:24360) = vq2(11:end-10);
         coords2 = [coords2;vq1(1:26000)'];
         
     end
@@ -499,12 +499,9 @@ else
     %     ofsu2 = ofsu(tmp);
     ofsu2 = ofsu;
 end
-% bck = mean(ours2(:,1:400));
-% early = mean(abs(ours2(:,2000:4000)),2);
-% late = mean(abs(ours2(:,5000:7000)),2);
-[chirpFFTnorm,chirpAmp,freqSmoothChrp,togoChrp]=get_ChirpFFTnorm(path2,info);
-early = mean(chirpFFTnorm(:,1:20),2);
-late = mean(chirpFFTnorm(:,50:60),2);
+
+early = median(ours2(:,500:2000),2);
+late = median(ours2(:,5000:7000),2);
 di = (early-late)./(early+late);
 %         di = (early-late);
 
@@ -573,7 +570,7 @@ tot = 278;
 % axis tight
 % box off
 % set(gca,'xtick',[])
-%
+% 
 % subplot(6,3,1)
 % data = flash_corr(IDboth(ontr2),:);
 % data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -582,8 +579,8 @@ tot = 278;
 % box off
 % set(gca,'xtick',[])
 % title(['putative ON parasol n = ',int2str(length(ontr2)),' / ',num2str(round(100/tot*length(ontr2)*10)/10),'%'])
-%
-%
+% 
+% 
 % subplot(6,3,3)
 % idnow = find(m2==2);
 % ASSIGN(chrp(IDnoflash(idnow)))=-2;
@@ -597,8 +594,8 @@ tot = 278;
 % set(gca,'xtick',[])
 % % title(['putative ON midget (no flash) n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'])
 % title(['n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'])
-%
-%
+% 
+% 
 % subplot(6,3,5)
 % data = comb_spike(IDboth(oftr2),:);
 % data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -608,7 +605,7 @@ tot = 278;
 % axis tight
 % box off
 % set(gca,'xtick',[])
-%
+% 
 % subplot(6,3,4)
 % data = flash_corr(IDboth(oftr2),:);
 % data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -617,8 +614,8 @@ tot = 278;
 % box off
 % set(gca,'xtick',[])
 % title(['putative OFF parasol n = ',int2str(length(oftr2)),' / ',num2str(round(100/tot*length(oftr2)*10)/10),'%'])
-%
-%
+% 
+% 
 % subplot(6,3,6)
 % idnow = find(m2==4);
 % ASSIGN(chrp(IDnoflash(idnow)))=-4;
@@ -632,8 +629,8 @@ tot = 278;
 % set(gca,'xtick',[])
 % % title(['putative ON parasol (no flash) n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'])
 % title(['n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'])
-%
-%
+% 
+% 
 % subplot(6,3,8)
 % data = comb_spike(IDboth(onsu2),:);
 % data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -643,7 +640,7 @@ tot = 278;
 % axis tight
 % box off
 % set(gca,'xtick',[])
-%
+% 
 % subplot(6,3,7)
 % data = flash_corr(IDboth(onsu2),:);
 % data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -652,8 +649,8 @@ tot = 278;
 % box off
 % set(gca,'xtick',[])
 % title(['putative ON midget n = ',int2str(length(onsu2)),' / ',num2str(round(100/tot*length(onsu2)*10)/10),'%'])
-%
-%
+% 
+% 
 % subplot(6,3,9)
 % idnow = find(m2==1);
 % ASSIGN(chrp(IDnoflash(idnow)))=-1;
@@ -667,8 +664,8 @@ tot = 278;
 % set(gca,'xtick',[])
 % % title(['putative ON parasol (no flash) n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'])
 % title(['n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'])
-%
-%
+% 
+% 
 % subplot(6,3,11)
 % data = comb_spike(IDboth(ofsu2),:);
 % data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -678,7 +675,7 @@ tot = 278;
 % axis tight
 % box off
 % set(gca,'xtick',[])
-%
+% 
 % subplot(6,3,10)
 % data = flash_corr(IDboth(ofsu2),:);
 % data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -687,8 +684,8 @@ tot = 278;
 % box off
 % set(gca,'xtick',[])
 % title(['putative OFF midget n = ',int2str(length(ofsu2)),' / ',num2str(round(100/tot*length(ofsu2)*10)/10),'%'])
-%
-%
+% 
+% 
 % subplot(6,3,12)
 % idnow = find(m2==5);
 % ASSIGN(chrp(IDnoflash(idnow)))=-5;
@@ -702,9 +699,9 @@ tot = 278;
 % set(gca,'xtick',[])
 % % title(['putative OFF parasol (no flash) n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'])
 % title(['n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'])
-%
-%
-%
+% 
+% 
+% 
 % subplot(6,3,14)
 % data = comb_spike(IDboth(onof2),:);
 % data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -715,7 +712,7 @@ tot = 278;
 % box off
 % set(gca,'xtick',0:2000:16000,'xticklabel',0:2:16)
 % xlabel('sec')
-%
+% 
 % subplot(6,3,13)
 % data = flash_corr(IDboth(onof2),:);
 % data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -725,8 +722,8 @@ tot = 278;
 % axis tight
 % box off
 % title(['putative ON-OFF bistratified n = ',int2str(length(onof2)),' / ',num2str(round(100/tot*length(onof2)*10)/10),'%'])
-%
-%
+% 
+% 
 % subplot(6,3,15)
 % idnow = find(m2==4);
 % ASSIGN(chrp(IDnoflash(idnow)))=-4;
@@ -739,9 +736,9 @@ tot = 278;
 % set(gca,'xtick',[])
 % title(['n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'])
 % box off
-%
-%
-%
+% 
+% 
+% 
 % subplot(6,3,16)
 % plot([1 1984-200],[128 128],'-','color',[0.4 0.4 0.4],'linewidth',2)
 % hold on
@@ -753,7 +750,7 @@ tot = 278;
 % box off
 % set(gca,'xtick',[])
 % ylabel('RGB')
-%
+% 
 % subplot(6,3,17)
 % plot([prot2(3:481,4); prot2(485:970,4)],'-','color',[0.4 0.4 0.4])
 % axis tight
@@ -761,7 +758,7 @@ tot = 278;
 % axis([ 1 965 0 255])
 % set(gca,'xtick',[])
 % ylabel('RGB')
-%
+% 
 % subplot(6,3,18)
 % plot([prot2(3:481,4); prot2(485:970,4)],'-','color',[0.4 0.4 0.4])
 % axis tight
@@ -863,13 +860,13 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %     box off
 %     axis off
 %     set(gca,'xtick',[])
-%
-%
+%     
+%     
 %     axes('position',[0.08 0.95-yh2*(2*(ax)) 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     imagesc(1-data2(:,200:5900))
 %     colormap gray
 %     axis off
-%
+%     
 %     axes('position',[0.2 0.95-yh2*(2*(ax))+yh1 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     data = comb_spike(IDboth(IDX),:);
 %     data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -882,13 +879,13 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %     axis off
 %     box off
 %     set(gca,'xtick',[])
-%
+%     
 %     axes('position',[0.2 0.95-yh2*(2*(ax)) 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     imagesc(1-data2)
 %     colormap gray
 %     axis off
-%
-%
+%     
+%     
 %     axes('position',[0.32 0.95-yh2*(2*(ax))+yh1 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     idnow = find(m2==tm);
 %     ASSIGN(chrp(IDnoflash(idnow)))=-tm;
@@ -906,13 +903,13 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %     % title(['putative ON midget (no flash) n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'])
 %     %     title(['n = ',int2str(length(idnow)),' / ',num2str(round(100/tot*length(idnow)*10)/10),'%'],...
 %     %         'fontname','Arial','fontsize',9)
-%
-%
+%     
+%     
 %     axes('position',[0.32 0.95-yh2*(2*(ax)) 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     imagesc(1-data2)
 %     colormap gray
 %     axis off
-%
+%     
 %     axes('position',[0.02 0.95-yh2*(2*(ax)) 0.035 yh3*2])%[0.08 0.9 0.8 0.02])
 %     if ax == 1
 %         text(0.05,0.9,'cluster 1','fontname','Arial','fontsize',7,'fontweight','bold')
@@ -926,19 +923,19 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %         text(0.05,0.9,'cluster 3','fontname','Arial','fontsize',7,'fontweight','bold')
 %         text(0.05,0.7,'put. ON midget','fontname','Arial','fontsize',7,'fontweight','bold')
 %         %         title(['putative ON midget, n = ',int2str(length(IDX)),' / ',num2str(round(100/tot*length(IDX)*10)/10),'%'])
-%
+%         
 %     elseif ax ==4
 %         text(0.05,0.9,'cluster 4','fontname','Arial','fontsize',7,'fontweight','bold')
-%
+%         
 %         text(0.05,0.7,'put. OFF midget','fontname','Arial','fontsize',7,'fontweight','bold')
 %         %         title(['putative OFF midget, n = ',int2str(length(IDX)),' / ',num2str(round(100/tot*length(IDX)*10)/10),'%'])
-%
+%         
 %     elseif ax ==5
 %         text(0.05,0.9,'cluster 5','fontname','Arial','fontsize',7,'fontweight','bold')
-%
+%         
 %         text(0.05,0.65,'put. ON-OFF bistrat.','fontname','Arial','fontsize',7,'fontweight','bold')
 %         %         title(['putative ON-OFF bistratified, n = ',int2str(length(IDX)),' / ',num2str(round(100/tot*length(IDX)*10)/10),'%'])
-%
+%         
 %     end
 %     text(0.05,0.4,['n = ',int2str(length(IDX)),...
 %         ' / ',int2str(length(idnow))],'fontname','Arial','fontsize',7)
@@ -948,7 +945,7 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %         'fontname','Arial','fontsize',7)
 %     box off
 %     axis off
-%
+%     
 %     axes('position',[0.44 0.95-yh2*(2*(ax)) 0.06 yh3*2])%[0.08 0.9 0.8 0.02])
 %     normP = [];
 %     for n = 1:length(IDX)
@@ -964,18 +961,18 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %     htmp = 1-normP; htmp = mean(htmp,1);
 %     htmp=reshape(htmp,4,6);
 %     htmp = flipud(fliplr(htmp));
-%
+%     
 %     imagesc(htmp)
 %     colormap gray
 %     axis tight
 %     axis off
 %     set(gca,'plotboxaspectratio',[1 1/6*4 1])
 % end
-%
+% 
 % % --- cells with flash+chrp but not assigned to the top 5
 % for ax = 6:8
 %     IDX = IDflashNotAs(find(flashNotAs==ax));
-%
+%     
 %     axes('position',[0.08 0.9-yh2*(2*(ax))+yh1 0.1  yh3])%[0.08 0.9 0.8 0.02])
 %     data = flash_corr(IDX,:);
 %     data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
@@ -984,31 +981,31 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %     box off
 %     axis off
 %     set(gca,'xtick',[])
-%
-%
+%     
+%     
 %     axes('position',[0.08 0.9-yh2*(2*(ax)) 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     imagesc(1-data2(:,200:5900))
 %     colormap gray
 %     axis off
-%
+%     
 %     axes('position',[0.2 0.9-yh2*(2*(ax))+yh1 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     data = comb_spike(IDX,:);
 %     data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
-%
+%     
 %     plot(mean(data2,1),'-k')
-%
+%     
 %     axis tight
 %     axis off
 %     box off
 %     set(gca,'xtick',[])
-%
+%     
 %     axes('position',[0.2 0.9-yh2*(2*(ax)) 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     imagesc(1-data2)
 %     colormap gray
 %     axis off
-%
-%
-%
+%     
+%     
+%     
 %     axes('position',[0.03 0.9-yh2*(2*(ax)) 0.035 yh1*2])%[0.08 0.9 0.8 0.02])
 %     if ax == 6
 %         text(0.05,0.9,'cluster 6 (ON)','fontname','Arial','fontsize',7,'fontweight','bold')
@@ -1022,10 +1019,10 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %     end
 %     text(0.05,0.7,['n = ',int2str(length(IDX)),' / ',num2str(round(100/tot*length(IDX)*10)/10),'%'],...
 %         'fontname','Arial','fontsize',7)
-%
+%     
 %     box off
 %     axis off
-%
+%     
 %     axes('position',[0.44 0.9-yh2*(2*(ax)) 0.06 yh3*2])%[0.08 0.9 0.8 0.02])
 %     normP = [];
 %     for n = 1:length(IDX)
@@ -1036,14 +1033,14 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %     htmp = 1-normP; htmp = mean(htmp,1);
 %     htmp=reshape(htmp,4,6);
 %     htmp = flipud(fliplr(htmp));
-%
+%     
 %     imagesc(htmp)
 %     colormap gray
 %     axis tight
 %     axis off
 %     set(gca,'plotboxaspectratio',[1 1/6*4 1])
 % end
-%
+% 
 % % --- cells without chrp response, but tested
 % for ax = 9:9+CC-1
 %     idx = IDnoChirp(find(CLUST(:,CC-1)==ax-8));
@@ -1054,8 +1051,8 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %         tmp = find(flash==idx(ii));
 %         IDXf = [IDXf;tmp];
 %     end
-%
-%
+%     
+%     
 %     axes('position',[0.08 0.85-yh2*(2*(ax))+yh1 0.1  yh3])%[0.08 0.9 0.8 0.02])
 %     data = flash_corr(IDXf,:);
 %     SS = sum(data,2); tmp = find(SS~=0);
@@ -1066,30 +1063,30 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %     box off
 %     axis off
 %     set(gca,'xtick',[])
-%
-%
+%     
+%     
 %     axes('position',[0.08 0.85-yh2*(2*(ax)) 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     imagesc(1-data2(:,200:5900))
 %     colormap gray
 %     axis off
-%
+%     
 %     axes('position',[0.2 0.85-yh2*(2*(ax))+yh1 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     data = comb_all(IDX,:);
 %     data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
 %     plot(mean(data2,1),'-k')
-%
+%     
 %     axis tight
 %     axis off
 %     box off
 %     set(gca,'xtick',[])
-%
+%     
 %     axes('position',[0.2 0.85-yh2*(2*(ax)) 0.1 yh3])%[0.08 0.9 0.8 0.02])
 %     imagesc(1-data2)
 %     colormap gray
 %     axis off
-%
-%
-%
+%     
+%     
+%     
 %     axes('position',[0.03 0.85-yh2*(2*(ax)) 0.035 yh1*2])%[0.08 0.9 0.8 0.02])
 %     if ax == 9
 %         text(0.05,0.9,'cluster 9 (ON)','fontname','Arial','fontsize',7,'fontweight','bold')
@@ -1102,20 +1099,20 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %         %         title(['putative ON midget, n = ',int2str(length(IDX)),' / ',num2str(round(100/tot*length(IDX)*10)/10),'%'])
 %     elseif ax == 12
 %         text(0.05,0.9,'cluster 12 (ON-OFF)','fontname','Arial','fontsize',7,'fontweight','bold')
-%
+%         
 %     elseif ax == 13
 %         text(0.05,0.9,'cluster 13 (ON-OFF)','fontname','Arial','fontsize',7,'fontweight','bold')
-%
+%         
 %     elseif ax == 14
 %         text(0.05,0.9,'cluster 14 (ON-OFF)','fontname','Arial','fontsize',7,'fontweight','bold')
-%
+%         
 %     end
 %     text(0.05,0.7,['n = ',int2str(length(IDX)),' / ',num2str(round(100/tot*length(IDX)*10)/10),'%'],...
 %         'fontname','Arial','fontsize',7)
-%
+%     
 %     box off
 %     axis off
-%
+%     
 %     axes('position',[0.44 0.85-yh2*(2*(ax)) 0.06 yh3*2])%[0.08 0.9 0.8 0.02])
 %     normP = [];
 %     for n = 1:length(IDX)
@@ -1126,7 +1123,7 @@ load(fullfile(path2,'EXAMPLE_INFO'))
 %     htmp = 1-normP; htmp = mean(htmp,1);
 %     htmp=reshape(htmp,4,6);
 %     htmp = flipud(fliplr(htmp));
-%
+%     
 %     imagesc(htmp)
 %     colormap gray
 %     axis tight
@@ -1160,7 +1157,7 @@ figure('position',[310.6000 924.2000 760.0000 1028],'color','w')
 
 mxv = []; mxv2 =[];
 
-axes('position',[x1 yst1 w0 0.01])%[0.08 0.9 0.8 0.02])
+    axes('position',[x1 yst1 w0 0.01])%[0.08 0.9 0.8 0.02])
 rectangle('position',[0 0 1 1],'facecolor',[0.6 0.6 0.6],'edgecolor','none')
 hold on
 rectangle('position',[1 0 1 1],'facecolor',[0 0 0 ],'edgecolor','none')
@@ -1171,7 +1168,7 @@ axis off
 axis([0 3 -inf inf])
 box off
 
-axes('position',[x2 yst1 w1 0.01])%[0.08 0.9 0.8 0.02])
+ axes('position',[x2 yst1 w1 0.01])%[0.08 0.9 0.8 0.02])
 plot(prot2(2:end,4),'-k')
 hold on
 plot([1 2000/16500*971],[-40 -40],'-k','linewidth',2)
@@ -1242,7 +1239,7 @@ for ax = 1:5
         mxv2 = [mxv2;max(mean(data2,1))];
     end
     %     axis([1 16502 0 30])
-    axis([-inf inf 0 1])
+   axis([-inf inf 0 1])
     axis off
     box off
     set(gca,'xtick',[])
@@ -1362,7 +1359,7 @@ for ax = 6:7
     data = comb_spike(IDX,:);
     data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
     plot(mean(data2,1),'-k')
-    axis([-inf inf 0 1])
+   axis([-inf inf 0 1])
     axis off
     box off
     set(gca,'xtick',[])
@@ -1370,7 +1367,7 @@ for ax = 6:7
     axes('position',[x2 yst2-yh2*(2*(ax)) w1 yh3])%[0.08 0.9 0.8 0.02])
     imagesc(1-data2)
     colormap gray
-    hold on
+     hold on
     plot([10 10],[0.5 length(IDX)+0.5],'-','color','k','linewidth',5)
     axis off
     
@@ -1403,7 +1400,7 @@ for ax = 6:7
     htmp = 1-normP; htmp = mean(htmp,1);
     htmp=reshape(htmp,4,6);
     htmp = flipud(fliplr(htmp));
-    HTMP = [HTMP;htmp(:)'];
+     HTMP = [HTMP;htmp(:)'];
     imagesc(htmp)
     colormap gray
     axis tight
@@ -1496,7 +1493,7 @@ for ax = 8
     htmp = 1-normP; htmp = mean(htmp,1);
     htmp=reshape(htmp,4,6);
     htmp = flipud(fliplr(htmp));
-    HTMP = [HTMP;htmp(:)'];
+     HTMP = [HTMP;htmp(:)'];
     imagesc(htmp)
     colormap gray
     axis tight
@@ -1545,9 +1542,9 @@ for ax = 9:9+length(cl)-1
     hold on
     if ax == 15
         plot([100 100],[20 40],'-k','linewidth',1)
-        %          plot([150 1150],[20 20],'-k','linewidth',1)
+%          plot([150 1150],[20 20],'-k','linewidth',1)
         text(-400,-0,'20 sp/s','fontname','Arial','fontsize',6,'rotation',90)
-        %         text(170,30,'0.5 s','fontname','Arial','fontsize',6)
+%         text(170,30,'0.5 s','fontname','Arial','fontsize',6)
     end
     %     plot(nanmean(data(:,200:5900),1),'-k')
     
@@ -1573,10 +1570,10 @@ for ax = 9:9+length(cl)-1
     box off
     set(gca,'xtick',[])
     hold on
-    %     if ax == 15
-    %          plot([150 1150],[0 0],'-k','linewidth',1)
-    %         text(170,0.2,'0.5 s','fontname','Arial','fontsize',6)
-    %     end
+%     if ax == 15
+%          plot([150 1150],[0 0],'-k','linewidth',1)
+%         text(170,0.2,'0.5 s','fontname','Arial','fontsize',6)
+%     end
     
     axes('position',[x2 yst3-yh2*(2*(ax)) w1 yh3])%[0.08 0.9 0.8 0.02])
     imagesc(1-data2)
@@ -1588,28 +1585,28 @@ for ax = 9:9+length(cl)-1
     axes('position',[0.02 yst3-yh2*(2*(ax))-0.01 0.035 yh1*2])%[0.08 0.9 0.8 0.02])
     if ax == 9
         text(0.05,0.9,'cluster 9','fontname','Arial','fontsize',7,'fontweight','bold')
-        %         text(0.05,0.65,'speed-tuned?','fontname','Arial','fontsize',7,'fontweight','bold')
+%         text(0.05,0.65,'speed-tuned?','fontname','Arial','fontsize',7,'fontweight','bold')
     elseif ax == 10
         text(0.05,0.9,'cluster 10','fontname','Arial','fontsize',7,'fontweight','bold')
-        %         text(0.05,0.65,'temporal tuning','fontname','Arial','fontsize',7,'fontweight','bold')
+%         text(0.05,0.65,'temporal tuning','fontname','Arial','fontsize',7,'fontweight','bold')
     elseif ax ==11
         text(0.05,0.9,'cluster 11','fontname','Arial','fontsize',7,'fontweight','bold')
-        %         text(0.05,0.65,'fast-big','fontname','Arial','fontsize',7,'fontweight','bold')
+%         text(0.05,0.65,'fast-big','fontname','Arial','fontsize',7,'fontweight','bold')
     elseif ax == 12
         text(0.05,0.9,'cluster 12','fontname','Arial','fontsize',7,'fontweight','bold')
-        %         text(0.05,0.65,'4Hz-big','fontname','Arial','fontsize',7,'fontweight','bold')
+%         text(0.05,0.65,'4Hz-big','fontname','Arial','fontsize',7,'fontweight','bold')
     elseif ax == 13
         text(0.05,0.9,'cluster 13','fontname','Arial','fontsize',7,'fontweight','bold')
-        %         text(0.05,0.65,'slow','fontname','Arial','fontsize',7,'fontweight','bold')
+%         text(0.05,0.65,'slow','fontname','Arial','fontsize',7,'fontweight','bold')
         
     elseif ax == 14
         text(0.05,0.9,'cluster 14','fontname','Arial','fontsize',7,'fontweight','bold')
-        %         text(0.05,0.65,'medium speed/size','fontname','Arial','fontsize',7,'fontweight','bold')
+%         text(0.05,0.65,'medium speed/size','fontname','Arial','fontsize',7,'fontweight','bold')
     elseif ax == 15
-        text(0.05,0.9,'cluster 15','fontname','Arial','fontsize',7,'fontweight','bold')
+               text(0.05,0.9,'cluster 15','fontname','Arial','fontsize',7,'fontweight','bold')
     elseif ax == 16
-        text(0.05,0.9,'cluster 16','fontname','Arial','fontsize',7,'fontweight','bold')
-        
+                     text(0.05,0.9,'cluster 16','fontname','Arial','fontsize',7,'fontweight','bold')
+ 
     end
     text(0.05,0.65,['n = ',int2str(length(IDX)),' / ',num2str(round(100/tot*length(IDX)*10)/10),'%'],...
         'fontname','Arial','fontsize',7)
@@ -1627,7 +1624,7 @@ for ax = 9:9+length(cl)-1
     htmp = 1-normP; htmp = mean(htmp,1);
     htmp=reshape(htmp,4,6);
     htmp = flipud(fliplr(htmp));
-    HTMP = [HTMP;htmp(:)'];
+     HTMP = [HTMP;htmp(:)'];
     imagesc(htmp)
     colormap gray
     axis tight
@@ -1635,14 +1632,14 @@ for ax = 9:9+length(cl)-1
     rectangle('position',[0.5 0.5  6 4],'edgecolor','k','facecolor','none')
     set(gca,'plotboxaspectratio',[1 1/6*4 1])
     if ax == 16
-        set(gca,'xtick',1:6,'xticklabel',[4000 2000 1000 500 200 100],'fontname','Arial','fontsize',7)
-        xtickangle(90)
-        set(gca,'ytick',1:4,'yticklabel',[8 4 2 1],'fontname','Arial','fontsize',7)
-        text(-2,2.5,'Hz','fontname','Arial','fontsize',7,'horizontalalignment','left')
-        text(3,8,'\mum','fontname','Arial','fontsize',7,'horizontalalignment','left')
+       set(gca,'xtick',1:6,'xticklabel',[4000 2000 1000 500 200 100],'fontname','Arial','fontsize',7) 
+    xtickangle(90)
+     set(gca,'ytick',1:4,'yticklabel',[8 4 2 1],'fontname','Arial','fontsize',7) 
+     text(-2,2.5,'Hz','fontname','Arial','fontsize',7,'horizontalalignment','left') 
+     text(3,8,'\mum','fontname','Arial','fontsize',7,'horizontalalignment','left') 
     else
-        axis off
-        
+           axis off
+ 
     end
     
     if ax == 9
@@ -1658,8 +1655,8 @@ for ax = 9:9+length(cl)-1
         text(0.05,0.9,'C_3','fontname','Arial','fontsize',10,'fontweight','bold')
         axis off
         box off
-        axes('position',[xnow(1)-0.02 yst3-yh2*(2*(ax))+yh1 0.015 yh3*2])%[0.08 0.9 0.8 0.02])
-        text(0.05,0.9,'C_4','fontname','Arial','fontsize',10,'fontweight','bold')
+                axes('position',[xnow(1)-0.02 yst3-yh2*(2*(ax))+yh1 0.015 yh3*2])%[0.08 0.9 0.8 0.02])
+ text(0.05,0.9,'C_4','fontname','Arial','fontsize',10,'fontweight','bold')
         axis off
         box off
     end
@@ -1704,8 +1701,8 @@ end
 %% cluster remaining cells with DG but not tested for chrp
 ASSIGN2 = ASSIGN;
 for a = -5:-1
-    tmp = find(ASSIGN2 == a);
-    ASSIGN2(tmp) = -a;
+tmp = find(ASSIGN2 == a);
+ASSIGN2(tmp) = -a;
 end
 CC = unique(ASSIGN2);
 tmp = find(CC>0); CC = CC(tmp);
@@ -1728,38 +1725,38 @@ for c = 1:length(CC)
             [m1,m2]=min(abs(S));
             ht = [ht;m1 m2];
         end
-        
+                   
     end
-    CLUH{c,1} = ht;
-    ALL =[ALL;ht];
+     CLUH{c,1} = ht;
+                    ALL =[ALL;ht];
 end
 [s1,s2] = sort(ALL(:,1));
 thrsh = s1(length(s1)*.95);
 
 missingHTMP = []; SS = [];
 for m = 1:length(missing)
-    tmp = find(togo == missing(m));
-    now = normPeaks(tmp,:,2);
-    now = 1-now;
-    now = flipud(fliplr(now));
-    %    [cX,cY,oX,oY,dX,dY] = get_GaussHeatmaps(now);
-    D = HTMP - repmat(now,16,1);
-    S = sum(abs(D)');
-    [m1,m2]=min(abs(S));
-    SS = [SS;m1 m2];
-    missingHTMP = [missingHTMP;now];
+   tmp = find(togo == missing(m));
+   now = normPeaks(tmp,:,2);
+   now = 1-now;
+   now = flipud(fliplr(now));
+%    [cX,cY,oX,oY,dX,dY] = get_GaussHeatmaps(now);
+   D = HTMP - repmat(now,16,1);
+   S = sum(abs(D)');
+   [m1,m2]=min(abs(S));
+   SS = [SS;m1 m2];
+   missingHTMP = [missingHTMP;now];
 end
 
 ASSIGN3 = ASSIGN2;
 tmp = find(SS(:,1)<=thrsh);
 ASSIGN3(missing(tmp)) = SS(tmp,2);
 
-for ax = 1:16
+for ax = 6:7
     if ax == 1
         tm = 2;
     elseif ax == 2
         tm = 4;
-    elseif ax ==3
+    elseif ax ==3   
         tm = 1;
     elseif ax == 4
         tm = 5;
@@ -1772,15 +1769,15 @@ for ax = 1:16
     if ax<6
         axes('position',[0.02 yst1-yh2*(2*(ax))-0.005 0.035 0.01])%[0.08 0.9 0.8 0.02])
     elseif ax<8
-        axes('position',[0.02 yst2-yh2*(2*(ax))-0.008 0.035 0.01])%[0.08 0.9 0.8 0.02])
+         axes('position',[0.02 yst2-yh2*(2*(ax))-0.008 0.035 0.01])%[0.08 0.9 0.8 0.02])
     elseif ax == 8
-        axes('position',[0.02 yst2-yh2*(2*(ax))-0.008 0.035 0.01])%[0.08 0.9 0.8 0.02])
+         axes('position',[0.02 yst2-yh2*(2*(ax))-0.008 0.035 0.01])%[0.08 0.9 0.8 0.02])
     elseif ax >8
-        axes('position',[0.02 yst3-yh2*(2*(ax))+0.002 0.035 0.01])%[0.08 0.9 0.8 0.02])
+         axes('position',[0.02 yst3-yh2*(2*(ax))-0.008 0.035 yh1*2])%[0.08 0.9 0.8 0.02])
     end
-    % axes('position',[0.02 yst3-yh2*(2*(ax))-0.01 0.035 yh1*2])%[0.08 0.9 0.8 0.02])
-    text(0.05,0.65,['n_all = ',int2str(length(IDX)),' / ',num2str(round(100/(tot+length(tmp))*length(IDX)*10)/10),'%'],...
-        'fontname','Arial','fontsize',7,'interpreter','none')
+% axes('position',[0.02 yst3-yh2*(2*(ax))-0.01 0.035 yh1*2])%[0.08 0.9 0.8 0.02])
+ text(0.05,0.65,['n = ',int2str(length(IDX)),' / ',num2str(round(100/(tot+length(tmp))*length(IDX)*10)/10),'%'],...
+        'fontname','Arial','fontsize',7)
     axis off
     box off
 end
@@ -1798,6 +1795,7 @@ end
 normP = normPeaks(ids,:,2);
 [cX,cY,oX,oY,dX,dY] = get_GaussHeatmaps(normPeaks(ids,:,:));
 
+[chirpFFTnorm,chirpAmp,freqSmoothChrp,togoChrp]=get_ChirpFFTnorm(path2,info);
 rangeF = length(chirpAmp)-chirpAmp(1);
 steps = round(1:length(chirpAmp)/3:length(chirpAmp));
 chk1=steps(1):steps(2)-1;
@@ -1817,7 +1815,7 @@ freq=[1 2 4 8 1 2 4 8 1 2 4 8 1 2 4 8 1 2 4 8 1 2 4 8];
 SP = unique(spat); FR =unique(freq);
 
 for ax = 1:5
-    if ax == 1
+      if ax == 1
         IDX = ontr2;
         tm = 2;
     elseif ax == 2
@@ -1861,20 +1859,20 @@ for ax = 1:5
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
             exnt = exnt+1;
             tp = find(IDSdg(tmp)==COLL_ID(exc));
-            scatter(dat2(tp),1,15,cols2(exnt,:),'linewidth',1)
+           scatter(dat2(tp),1,15,cols2(exnt,:),'linewidth',1) 
         end
     end
     
     axis([0 4000 0.3 1.7 ])
     set(gca,'xtick',[0 2000 4000],'xticklabel',[4 2 0])
-    %     xtickangle(90)
+%     xtickangle(90)
     set(gca,'ytick',[],'ycolor','w')
     if ax == 1
-        title({'spatial', 'pref.'},'fontname','Arial','fontsize',7)
+       title({'spatial', 'pref.'},'fontname','Arial','fontsize',7) 
     end
-    
-    if ax == 5
-        xlabel('mm','fontname','Arial','fontsize',7)
+     
+     if ax == 5
+       xlabel('mm','fontname','Arial','fontsize',7) 
     end
     
     %---temporal ---
@@ -1900,100 +1898,100 @@ for ax = 1:5
     
     axis([0 8 0.3 1.7 ])
     set(gca,'xtick',[0 4 8],'xticklabel',[0 4 8])
-    %      xtickangle(90)
+%      xtickangle(90)
     set(gca,'ytick',[],'ycolor','w')
-    exnt = 0;
+     exnt = 0;
     for exc = 1:length(COLL_ID)
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
             exnt = exnt+1;
             tp = find(IDSdg(tmp)==COLL_ID(exc));
-            scatter(dat2(tp),1,15,cols2(exnt,:),'linewidth',1)
+           scatter(dat2(tp),1,15,cols2(exnt,:),'linewidth',1) 
         end
     end
     if ax == 1
-        title({'temporal', 'pref.'},'fontname','Arial','fontsize',7)
+       title({'temporal', 'pref.'},'fontname','Arial','fontsize',7) 
     end
-    if ax == 5
-        xlabel('Hz','fontname','Arial','fontsize',7)
+      if ax == 5
+       xlabel('Hz','fontname','Arial','fontsize',7) 
     end
     
     
     %---broadness ---
-    %     axes('position',[xnow(3) yst1-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
-    %     dat2 = (dX(tmp)+dY(tmp))./2;
-    %     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
-    %         {'.'},'distributionColors',{[0 0 0 1]},'xyOri','flipped')
-    %     hold on
-    %     plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
-    %
-    %     axis([0 4 0.3 1.7 ])
-    %     set(gca,'xtick',[0 2 4],'xticklabel',[0 2 4])
-    % %      xtickangle(90)
-    %     set(gca,'ytick',[],'ycolor','w')
-    %     if ax == 1
-    %        title({'width of', 'S-T pref.'},'fontname','Arial','fontsize',7)
-    %     end
+%     axes('position',[xnow(3) yst1-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
+%     dat2 = (dX(tmp)+dY(tmp))./2;
+%     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
+%         {'.'},'distributionColors',{[0 0 0 1]},'xyOri','flipped')
+%     hold on
+%     plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
+%     
+%     axis([0 4 0.3 1.7 ])
+%     set(gca,'xtick',[0 2 4],'xticklabel',[0 2 4])
+% %      xtickangle(90)
+%     set(gca,'ytick',[],'ycolor','w')
+%     if ax == 1
+%        title({'width of', 'S-T pref.'},'fontname','Arial','fontsize',7) 
+%     end
     
     % ----chrp---
-    axes('position',[xnow(1) yst1-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
-    dat = [];
-    for t = 1:length(tmp)
-        id = find(chrp==IDSdg(tmp(t)));
-        dat = [dat;id];
-    end
-    plotSpread(Chrp_index(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
+     axes('position',[xnow(1) yst1-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
+dat = [];
+for t = 1:length(tmp)
+    id = find(chrp==IDSdg(tmp(t)));
+    dat = [dat;id];
+end
+     plotSpread(Chrp_index(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
     plot([median(Chrp_index(dat)) median(Chrp_index(dat))],[0.5 1.5],'-','color','k','linewidth',1)
     plot([0 0],[0.3 1.7],'--','color',[0.4 0.4 0.4])
     axis([-1 1 0.3 1.7 ])
     set(gca,'xtick',[-1 0 1],'xticklabel',[-1 0 1])
-    %      xtickangle(90)
+%      xtickangle(90)
     set(gca,'ytick',[],'ycolor','w')
-    exnt = 0;
+     exnt = 0;
     for exc = 1:length(COLL_ID)
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
             exnt = exnt+1;
             tp = find(IDSdg(tmp)==COLL_ID(exc));
-            scatter(Chrp_index(dat(tp)),1,15,cols2(exnt,:),'linewidth',1)
+           scatter(Chrp_index(dat(tp)),1,15,cols2(exnt,:),'linewidth',1) 
         end
     end
     if ax == 1
-        title({'chirp freq.', 'index'},'fontname','Arial','fontsize',7)
+       title({'chirp freq.', 'index'},'fontname','Arial','fontsize',7) 
     end
-    if ax == 5
-        xlabel('a.u.','fontname','Arial','fontsize',7)
+     if ax == 5
+       xlabel('a.u.','fontname','Arial','fontsize',7) 
     end
     
     % --- chrp contrast ---
     axes('position',[xnow(2) yst1-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
-    dat = [];
-    for t = 1:length(tmp)
-        id = find(chrp==IDSdg(tmp(t)));
-        dat = [dat;id];
-    end
-    plotSpread(cntrstIDX(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
+dat = [];
+for t = 1:length(tmp)
+    id = find(chrp==IDSdg(tmp(t)));
+    dat = [dat;id];
+end
+     plotSpread(cntrstIDX(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
     plot([median(cntrstIDX(dat)) median(cntrstIDX(dat))],[0.5 1.5],'-','color','k','linewidth',1)
     plot([0 0],[0.3 1.7],'--','color',[0.4 0.4 0.4])
     axis([-1 1 0.3 1.7 ])
     set(gca,'xtick',[-1 0 1],'xticklabel',[-1 0 1])
-    %      xtickangle(90)
+%      xtickangle(90)
     set(gca,'ytick',[],'ycolor','w')
-    exnt = 0;
+     exnt = 0;
     for exc = 1:length(COLL_ID)
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
             exnt = exnt+1;
             tp = find(IDSdg(tmp)==COLL_ID(exc));
-            scatter(cntrstIDX(dat(tp)),1,15,cols2(exnt,:),'linewidth',1)
+           scatter(cntrstIDX(dat(tp)),1,15,cols2(exnt,:),'linewidth',1) 
         end
     end
     if ax == 1
-        title({'contrast', 'pref. index'},'fontname','Arial','fontsize',7)
+       title({'contrast', 'pref. index'},'fontname','Arial','fontsize',7) 
     end
-    if ax == 5
-        xlabel('a.u.','fontname','Arial','fontsize',7)
+     if ax == 5
+       xlabel('a.u.','fontname','Arial','fontsize',7) 
     end
     
 end
@@ -2018,27 +2016,27 @@ for ax = 6:8
             dat2 = [dat2;SP(in)];
         end
     end
-    dat2 = 4000-dat2;
-    
+        dat2 = 4000-dat2;
+
     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
     plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
-    exnt = 0;
+     exnt = 0;
     for exc = 1:length(COLL_ID)
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
             exnt = exnt+1;
             tp = find(IDSdg(tmp)==COLL_ID(exc));
-            scatter(dat2(tp),1,15,cols2(exnt,:),'linewidth',1)
+           scatter(dat2(tp),1,15,cols2(exnt,:),'linewidth',1) 
         end
     end
     axis([0 4000 0.3 1.7 ])
     set(gca,'xtick',[0 2000 4000],'xticklabel',[4 2 0])
-    %     xtickangle(90)
+%     xtickangle(90)
     set(gca,'ytick',[],'ycolor','w')
-    
-    if ax == 8
-        xlabel('mm','fontname','Arial','fontsize',7)
+   
+     if ax == 8
+       xlabel('mm','fontname','Arial','fontsize',7) 
     end
     
     %---temporal ---
@@ -2061,89 +2059,89 @@ for ax = 6:8
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
     plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
-    exnt = 0;
+     exnt = 0;
     for exc = 1:length(COLL_ID)
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
             exnt = exnt+1;
             tp = find(IDSdg(tmp)==COLL_ID(exc));
-            scatter(dat2(tp),1,15,cols2(exnt,:),'linewidth',1)
+           scatter(dat2(tp),1,15,cols2(exnt,:),'linewidth',1) 
         end
     end
     axis([0 8 0.3 1.7 ])
     set(gca,'xtick',[0 4 8],'xticklabel',[0 4 8])
-    %  xtickangle(90)
+%  xtickangle(90)
     set(gca,'ytick',[],'ycolor','w')
-    if ax == 8
-        xlabel('Hz','fontname','Arial','fontsize',7)
+     if ax == 8
+       xlabel('Hz','fontname','Arial','fontsize',7) 
     end
-    
+   
     %---broadness ---
-    %     axes('position',[xnow(3) yst2-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
-    %     dat2 = (dX(tmp)+dY(tmp))./2;
-    %     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
-    %         {'.'},'distributionColors',{[0 0 0 1]},'xyOri','flipped')
-    %     hold on
-    %     plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
-    %
-    %     axis([0 4 0.3 1.7 ])
-    %     set(gca,'xtick',[0 2 4],'xticklabel',[0 2 4])
-    % %    xtickangle(90)
-    %     set(gca,'ytick',[],'ycolor','w')
+%     axes('position',[xnow(3) yst2-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
+%     dat2 = (dX(tmp)+dY(tmp))./2;
+%     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
+%         {'.'},'distributionColors',{[0 0 0 1]},'xyOri','flipped')
+%     hold on
+%     plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
+%     
+%     axis([0 4 0.3 1.7 ])
+%     set(gca,'xtick',[0 2 4],'xticklabel',[0 2 4])
+% %    xtickangle(90)
+%     set(gca,'ytick',[],'ycolor','w')
     
-    % ----chrp---
-    axes('position',[xnow(1) yst2-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
-    dat = [];
-    for t = 1:length(tmp)
-        id = find(chrp==IDSdg(tmp(t)));
-        dat = [dat;id];
-    end
-    plotSpread(Chrp_index(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
+     % ----chrp---
+     axes('position',[xnow(1) yst2-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
+dat = [];
+for t = 1:length(tmp)
+    id = find(chrp==IDSdg(tmp(t)));
+    dat = [dat;id];
+end
+     plotSpread(Chrp_index(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
     plot([median(Chrp_index(dat)) median(Chrp_index(dat))],[0.5 1.5],'-','color','k','linewidth',1)
     plot([0 0],[0.3 1.7],'--','color',[0.4 0.4 0.4])
     axis([-1 1 0.3 1.7 ])
     set(gca,'xtick',[-1 0 1],'xticklabel',[-1 0 1])
-    %    xtickangle(90)
+%    xtickangle(90)
     set(gca,'ytick',[],'ycolor','w')
-    exnt = 0;
+     exnt = 0;
     for exc = 1:length(COLL_ID)
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
             exnt = exnt+1;
             tp = find(IDSdg(tmp)==COLL_ID(exc));
-            scatter(Chrp_index(dat(tp)),1,15,cols2(exnt,:),'linewidth',1)
+           scatter(Chrp_index(dat(tp)),1,15,cols2(exnt,:),'linewidth',1) 
         end
     end
     if ax == 8
-        xlabel('a.u.','fontname','Arial','fontsize',7)
+       xlabel('a.u.','fontname','Arial','fontsize',7) 
     end
     
     % --- chrp contrast ---
     axes('position',[xnow(2) yst2-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
-    dat = [];
-    for t = 1:length(tmp)
-        id = find(chrp==IDSdg(tmp(t)));
-        dat = [dat;id];
-    end
-    plotSpread(cntrstIDX(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
+dat = [];
+for t = 1:length(tmp)
+    id = find(chrp==IDSdg(tmp(t)));
+    dat = [dat;id];
+end
+     plotSpread(cntrstIDX(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
     plot([median(cntrstIDX(dat)) median(cntrstIDX(dat))],[0.5 1.5],'-','color','k','linewidth',1)
     plot([0 0],[0.3 1.7],'--','color',[0.4 0.4 0.4])
     axis([-1 1 0.3 1.7 ])
     set(gca,'xtick',[-1 0 1],'xticklabel',[-1 0 1])
-    exnt = 0;
+     exnt = 0;
     for exc = 1:length(COLL_ID)
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
             exnt = exnt+1;
             tp = find(IDSdg(tmp)==COLL_ID(exc));
-            scatter(cntrstIDX(dat(tp)),1,15,cols2(exnt,:),'linewidth',1)
+           scatter(cntrstIDX(dat(tp)),1,15,cols2(exnt,:),'linewidth',1) 
         end
     end
-    %      xtickangle(90)
+%      xtickangle(90)
     set(gca,'ytick',[],'ycolor','w')
     if ax == 8
-        xlabel('a.u.','fontname','Arial','fontsize',7)
+       xlabel('a.u.','fontname','Arial','fontsize',7) 
     end
 end
 
@@ -2167,8 +2165,8 @@ for ax = 9:16
             dat2 = [dat2;SP(in)];
         end
     end
-    dat2 = 4000-dat2;
-    
+      dat2 = 4000-dat2;
+
     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
@@ -2176,10 +2174,10 @@ for ax = 9:16
     
     axis([0 4000 0.3 1.7 ])
     set(gca,'xtick',[0 2000 4000],'xticklabel',[4 2 0])
-    %     xtickangle(90)
+%     xtickangle(90)
     set(gca,'ytick',[],'ycolor','w')
     if ax == 16
-        xlabel('mm','fontname','Arial','fontsize',7)
+       xlabel('mm','fontname','Arial','fontsize',7) 
     end
     
     %---temporal ---
@@ -2203,29 +2201,29 @@ for ax = 9:16
     hold on
     plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
     
-    axis([0 8 0.3 1.7 ])
+    axis([0 8 0.3 1.7 ])    
     set(gca,'xtick',[0 4 8],'xticklabel',[0 4 8])
-    %     xtickangle(90)
+%     xtickangle(90)
     set(gca,'ytick',[],'ycolor','w')
     if ax == 16
-        xlabel('Hz','fontname','Arial','fontsize',7)
+       xlabel('Hz','fontname','Arial','fontsize',7) 
     end
     
     %---broadness ---
-    %     axes('position',[xnow(3) yst3-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
-    %     dat2 = (dX(tmp)+dY(tmp))./2;
-    %     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
-    %         {'.'},'distributionColors',{[0 0 0 1]},'xyOri','flipped')
-    %     hold on
-    %     plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
-    %
-    %     axis([0 4 0.3 1.7 ])
-    %     set(gca,'xtick',[0 2 4],'xticklabel',[0 2 4])
-    % %     xtickangle(90)
-    %     set(gca,'ytick',[],'ycolor','w')
-    %     if ax == 15
-    %        xlabel('a.u.','fontname','Arial','fontsize',7)
-    %     end
+%     axes('position',[xnow(3) yst3-yh2*(2*(ax)) w3 yh4])%[0.08 0.9 0.8 0.02])
+%     dat2 = (dX(tmp)+dY(tmp))./2;
+%     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
+%         {'.'},'distributionColors',{[0 0 0 1]},'xyOri','flipped')
+%     hold on
+%     plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
+%     
+%     axis([0 4 0.3 1.7 ])
+%     set(gca,'xtick',[0 2 4],'xticklabel',[0 2 4])
+% %     xtickangle(90)
+%     set(gca,'ytick',[],'ycolor','w')
+%     if ax == 15
+%        xlabel('a.u.','fontname','Arial','fontsize',7) 
+%     end
     
 end
 %%
@@ -2240,7 +2238,7 @@ end
 %     plot((comb_spike(pl,:)-min(comb_spike(pl,:)))./(max(comb_spike(pl,:))-min(comb_spike(pl,:))),'-c')
 %     hold on
 %     plot(ours(pl,:),'-k')
-%
+%     
 %     subplot(3,1,2)
 %     plot(ours(pl,:),'-k')
 %     hold on
@@ -2253,7 +2251,7 @@ end
 %     % plot(templ(m2(2),:),'-c')
 %     % title([num2str(s1(pl)),' || ',list{tmp},' / ',list{m2(2)}])
 %     title([num2str(matches(pl,sh)),' || ',list{sh}])
-%
+%     
 %     subplot(3,1,3)
 %     plot(flash_corr(pl,:))
 %     w = waitforbuttonpress

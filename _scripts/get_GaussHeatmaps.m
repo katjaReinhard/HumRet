@@ -5,9 +5,13 @@ st = 0; fact=2;
 
 allCenterX = []; allCenterY = []; allContX = cell(1,1); allContY = cell(1,1);
 dimX = []; dimY = [];
-for nn = 1:length(normDG)
+for nn = 1:size(normDG,1)
     %%
+    if size(normDG,3)>1
     curr=normDG(nn,:,2);
+    else
+          curr=normDG(nn,:);
+    end
     curr=mean(curr,1);
     dat=reshape(curr,4,6);
     dat=flipud(fliplr(dat));
