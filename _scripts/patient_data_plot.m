@@ -14,9 +14,9 @@ figure
 subplot(2,2,1)
 dis = find(patient_data(:,2)==1);
 nodis = find(patient_data(:,2)==0);
-scatter(patient_data(nodis,1),patient_data(nodis,7),25,'k');
+scatter(patient_data(nodis,1),patient_data(nodis,7),45,'k','linewidth',2);
 hold on
-scatter(patient_data(dis,1),patient_data(dis,7),20,[0.6 0.6 0.6],'filled');
+scatter(patient_data(dis,1),patient_data(dis,7),35,[0.6 0.6 0.6],'filled');
 axis([0 20 0 100])
 xlabel('ischemia (min)')
 ylabel('# responding units')
@@ -40,9 +40,10 @@ yfit = P(1)*patient_data(:,1)+P(2);
 hold on
 plot(patient_data(:,1),yfit,'-','color',cols(3,:))
 
-scatter(patient_data(:,1),patient_data(:,3),25,cols(1,:),'filled');
-scatter(patient_data(:,1),patient_data(:,4),20,cols(2,:),'filled');
-scatter(patient_data(:,1),patient_data(:,6),15,cols(3,:),'filled');
+scatter(patient_data(:,1),patient_data(:,3),45,cols(1,:),'linewidth',1);
+s1 = scatter(patient_data(:,1),patient_data(:,4),35,cols(2,:),'filled');
+scatter(patient_data(:,1),patient_data(:,6),20,cols(3,:),'filled');
+alpha(s1,0.5)
 xlabel('ischemia (min)')
 ylabel('# responding units')
 axis([0 20 0 100])
@@ -102,7 +103,7 @@ scatter(repmat(10,1,length(data_dis)),data_dis,15,[cols(3,:)],'markerfacealpha',
  set(gca,'xtick',[2.5 8.5],'xticklabel',{'healthy','with cond.'})
  ylabel('# responding units')
  
- legend([p1 p2 p3 p4],{'total','drifting-grating','chirp','flash'},'fontname','Arial','fontsize',7)
+%  legend([p1 p2 p3 p4],{'total','drifting-grating','chirp','flash'},'fontname','Arial','fontsize',7)
  
  
 subplot(2,2,2)
@@ -121,4 +122,4 @@ plotSpread(data_dis,'distributionIdx',repmat(2,length(data_dis),1),'distribution
  set(gca,'xtick',[1 2],'xticklabel',{'healthy','with cond.'})
  ylabel('ischemia (min)')
 
-saveas(gcf,fullfile(pathSave,'data_per_donor.svg'))
+% saveas(gcf,fullfile(pathSave,'data_per_donor.svg'))

@@ -448,6 +448,8 @@ for d = 1:size(ours,1)
     DS = sum(abs(D)')./size(d1,2);
     matches = [matches;DS min(DS)];
 end
+[chirpFFTnorm,chirpAmp,freqSmoothChrp,togoChrp]=get_ChirpFFTnorm(path2,info);
+
 if vers == 1
     % find similarity to the 5 templates
     
@@ -461,18 +463,48 @@ if vers == 1
     ONOF = matches2(onof,3);
     
     % only consider cells that have <0.25 average difference
-    tmp = find(ONSU<0.25);
+    tmp = find(ONSU<chrpThr);
     onsu2 = onsu(tmp);
-    tmp = find(ONTR<0.25);
+    tmp = find(ONTR<chrpThr);
     ontr2 = ontr(tmp);
-    tmp = find(OFTR<0.25);
+    tmp = find(OFTR<chrpThr);
     oftr2 = oftr(tmp);
-    tmp = find(OFSU<0.25);
+    tmp = find(OFSU<chrpThr);
     ofsu2 = ofsu(tmp);
-    tmp = find(ONOF<0.25);
+    tmp = find(ONOF<chrpThr);
     onof2 = onof(tmp);
-else
+elseif vers == 2
     early = median(ours2(IDboth(ontr),500:2000),2);
+    late = median(ours2(IDboth(ontr),5000:7000),2);
+    di = early-late;
+    tmp = find(di<0);
+    ontr2 = ontr(tmp);
+    early = median(ours2(IDboth(onsu),500:2000),2);
+    late = median(ours2(IDboth(onsu),5000:7000),2);
+    di = early-late;
+    tmp = find(abs(di)<0.2);
+    onsu2 = onsu(tmp);
+    early = median(ours2(IDboth(onof),500:2000),2);
+    late = median(ours2(IDboth(onof),5000:7000),2);
+    di = early-late;
+    tmp = find(di<0);
+    onof2 = onof(tmp);
+    early = median(ours2(IDboth(oftr),500:2000),2);
+    late = median(ours2(IDboth(oftr),5000:7000),2);
+    di = early-late;
+    tmp = find(di<0);
+    oftr2 = oftr(tmp);
+    %     early = median(ours2(ofsu,500:2000),2);
+    %     late = median(ours2(ofsu,5000:7000),2);
+    %     di = early-late;
+    %     tmp = find(di<0);
+    %     ofsu2 = ofsu(tmp);
+    ofsu2 = ofsu;
+else
+    early = mean(chirpFFTnorm(:,1:22),2);
+late = mean(chirpFFTnorm(:,49:60),2);
+di = (early-late)./(early+late);
+      early = median(ours2(IDboth(ontr),500:2000),2);
     late = median(ours2(IDboth(ontr),5000:7000),2);
     di = early-late;
     tmp = find(di<0);
@@ -502,10 +534,9 @@ end
 % bck = mean(ours2(:,1:400));
 % early = mean(abs(ours2(:,2000:4000)),2);
 % late = mean(abs(ours2(:,5000:7000)),2);
-[chirpFFTnorm,chirpAmp,freqSmoothChrp,togoChrp]=get_ChirpFFTnorm(path2,info);
 early = mean(chirpFFTnorm(:,1:20),2);
 late = mean(chirpFFTnorm(:,50:60),2);
-di = (early-late)./(early+late);
+di = (late-early)./(early+late);
 %         di = (early-late);
 
 tmp = find(di<0);
@@ -519,14 +550,16 @@ ASSIGN(chrp(IDboth(onof2))) = 3;
 ASSIGN(chrp(IDboth(oftr2))) = 4;
 ASSIGN(chrp(IDboth(ofsu2))) = 5;
 
+simil = [matches(IDboth(onsu2),6);matches(IDboth(ontr2),6);matches(IDboth(ofsu2),6);matches(IDboth(oftr2),6)];
+
+    chrpThr = mean(simil)+std(simil);
 IDnoflash =  find(S==0);
 matchesO = matches(IDnoflash,:);
-tmp = find(matchesO(:,6)<0.25);
+tmp = find(matchesO(:,6)<chrpThr);
 IDnoflash2 = IDnoflash(tmp);
 matchesO2 = matchesO(tmp,:);
-IDnoflashNoTop = IDnoflash(find(matchesO(:,6)>=0.25));
+IDnoflashNoTop = IDnoflash(find(matchesO(:,6)>=chrpThr));
 IDnoflashNoTop = setdiff(IDnoflashNoTop,78);
-%!!!!!----------- !!! this is not incorporated yet, but remaining into additional cluster
 
 IDflashNotAs = setdiff(IDboth,[IDboth(onsu2) IDboth(ontr2) IDboth(onof2) IDboth(oftr2) IDboth(ofsu2)]);
 flashNotAs = zeros(length(IDflashNotAs),1);
@@ -1165,8 +1198,8 @@ rectangle('position',[0 0 1 1],'facecolor',[0.6 0.6 0.6],'edgecolor','none')
 hold on
 rectangle('position',[1 0 1 1],'facecolor',[0 0 0 ],'edgecolor','none')
 rectangle('position',[2 0 1 1],'facecolor',[0.6 0.6 0.6],'edgecolor','none')
-plot([0 0.5],[-0.4 -0.4],'-k','linewidth',2)
-text(0,-1,'0.5 s','fontname','arial','fontsize',6,'horizontalalignment','left')
+plot([1 1.5],[-0.4 -0.4],'-k','linewidth',2)
+text(1,-1.4,'1 s','fontname','arial','fontsize',6,'horizontalalignment','left')
 axis off
 axis([0 3 -inf inf])
 box off
@@ -1175,7 +1208,7 @@ axes('position',[x2 yst1 w1 0.01])%[0.08 0.9 0.8 0.02])
 plot(prot2(2:end,4),'-k')
 hold on
 plot([1 2000/16500*971],[-40 -40],'-k','linewidth',2)
-text(0,-200,'2 s','fontname','arial','fontsize',6,'horizontalalignment','left')
+text(0,-300,'2 s','fontname','arial','fontsize',6,'horizontalalignment','left')
 axis([1 length(prot2)-1 -220 255])
 axis off
 box off
@@ -1218,7 +1251,12 @@ for ax = 1:5
     axis off
     set(gca,'xtick',[])
     
-    
+      if ax == 1
+        plot([100 100],[20 40],'-k','linewidth',1)
+        %          plot([150 1150],[20 20],'-k','linewidth',1)
+        text(-400,-0,'20 sp/s','fontname','Arial','fontsize',6,'rotation',90)
+        %         text(170,30,'0.5 s','fontname','Arial','fontsize',6)
+    end
     
     axes('position',[x1 yst1-yh2*(2*(ax)) w0 yh3])%[0.08 0.9 0.8 0.02])
     imagesc(1-data2(:,200:5900))
@@ -1286,7 +1324,7 @@ for ax = 1:5
     end
     %     text(0.05,0.4,['n = ',int2str(length(IDX)),...
     %         ', ',int2str(length(idnow))],'fontname','Arial','fontsize',7)
-    text(0.05,0.4,['n = ',int2str(length(idnow)+length(IDX)),' / ',num2str(round(100/tot*(length(idnow)+length(IDX))*10)/10),'%'],...
+    text(0.05,0.35,['n = ',int2str(length(idnow)+length(IDX)),' / ',num2str(round(100/tot*(length(idnow)+length(IDX))*10)/10),'%'],...
         'fontname','Arial','fontsize',7)
     box off
     axis off
@@ -1333,6 +1371,7 @@ for ax = 1:5
         axis off
         box off
     end
+    
 end
 
 % --- cells with flash+chrp but not assigned to the top 5
@@ -1543,12 +1582,7 @@ for ax = 9:9+length(cl)-1
     data2 = (data-repmat(min(data')',1,size(data,2)))./(repmat(max(data')',1,size(data,2))-repmat(min(data')',1,size(data,2)));
     plot(nanmean(data1b(:,200:5900),1),'-','color',[0.6 0.6 0.6])
     hold on
-    if ax == 15
-        plot([100 100],[20 40],'-k','linewidth',1)
-        %          plot([150 1150],[20 20],'-k','linewidth',1)
-        text(-400,-0,'20 sp/s','fontname','Arial','fontsize',6,'rotation',90)
-        %         text(170,30,'0.5 s','fontname','Arial','fontsize',6)
-    end
+  
     %     plot(nanmean(data(:,200:5900),1),'-k')
     
     axis([1 5700 0 40])
@@ -1855,7 +1889,7 @@ for ax = 1:5
     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 0.5]},'xyOri','flipped')
     hold on
-    plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
+    plot([mean(dat2) mean(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
     exnt = 0;
     for exc = 1:length(COLL_ID)
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
@@ -1896,7 +1930,7 @@ for ax = 1:5
     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
-    plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
+    plot([mean(dat2) mean(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
     
     axis([0 8 0.3 1.7 ])
     set(gca,'xtick',[0 4 8],'xticklabel',[0 4 8])
@@ -1944,7 +1978,7 @@ for ax = 1:5
     plotSpread(Chrp_index(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
-    plot([median(Chrp_index(dat)) median(Chrp_index(dat))],[0.5 1.5],'-','color','k','linewidth',1)
+    plot([mean(Chrp_index(dat)) mean(Chrp_index(dat))],[0.5 1.5],'-','color','k','linewidth',1)
     plot([0 0],[0.3 1.7],'--','color',[0.4 0.4 0.4])
     axis([-1 1 0.3 1.7 ])
     set(gca,'xtick',[-1 0 1],'xticklabel',[-1 0 1])
@@ -1975,7 +2009,7 @@ for ax = 1:5
     plotSpread(cntrstIDX(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
-    plot([median(cntrstIDX(dat)) median(cntrstIDX(dat))],[0.5 1.5],'-','color','k','linewidth',1)
+    plot([mean(cntrstIDX(dat)) mean(cntrstIDX(dat))],[0.5 1.5],'-','color','k','linewidth',1)
     plot([0 0],[0.3 1.7],'--','color',[0.4 0.4 0.4])
     axis([-1 1 0.3 1.7 ])
     set(gca,'xtick',[-1 0 1],'xticklabel',[-1 0 1])
@@ -2023,7 +2057,7 @@ for ax = 6:8
     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
-    plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
+    plot([mean(dat2) mean(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
     exnt = 0;
     for exc = 1:length(COLL_ID)
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
@@ -2060,7 +2094,7 @@ for ax = 6:8
     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
-    plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
+    plot([mean(dat2) mean(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
     exnt = 0;
     for exc = 1:length(COLL_ID)
         if ~isempty(find(IDSdg(tmp)==COLL_ID(exc)))
@@ -2100,7 +2134,7 @@ for ax = 6:8
     plotSpread(Chrp_index(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
-    plot([median(Chrp_index(dat)) median(Chrp_index(dat))],[0.5 1.5],'-','color','k','linewidth',1)
+    plot([mean(Chrp_index(dat)) mean(Chrp_index(dat))],[0.5 1.5],'-','color','k','linewidth',1)
     plot([0 0],[0.3 1.7],'--','color',[0.4 0.4 0.4])
     axis([-1 1 0.3 1.7 ])
     set(gca,'xtick',[-1 0 1],'xticklabel',[-1 0 1])
@@ -2128,7 +2162,7 @@ for ax = 6:8
     plotSpread(cntrstIDX(dat),'distributionIdx',repmat(1,length(dat),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
-    plot([median(cntrstIDX(dat)) median(cntrstIDX(dat))],[0.5 1.5],'-','color','k','linewidth',1)
+    plot([mean(cntrstIDX(dat)) mean(cntrstIDX(dat))],[0.5 1.5],'-','color','k','linewidth',1)
     plot([0 0],[0.3 1.7],'--','color',[0.4 0.4 0.4])
     axis([-1 1 0.3 1.7 ])
     set(gca,'xtick',[-1 0 1],'xticklabel',[-1 0 1])
@@ -2172,7 +2206,7 @@ for ax = 9:16
     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
-    plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
+    plot([mean(dat2) mean(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
     
     axis([0 4000 0.3 1.7 ])
     set(gca,'xtick',[0 2000 4000],'xticklabel',[4 2 0])
@@ -2201,7 +2235,7 @@ for ax = 9:16
     plotSpread(dat2,'distributionIdx',repmat(1,length(dat2),1),'distributionMarkers',...
         {'.'},'distributionColors',{[0.7 0.7 0.7 1]},'xyOri','flipped')
     hold on
-    plot([median(dat2) median(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
+    plot([mean(dat2) mean(dat2)],[0.5 1.5],'-','color','k','linewidth',1)
     
     axis([0 8 0.3 1.7 ])
     set(gca,'xtick',[0 4 8],'xticklabel',[0 4 8])
@@ -2260,5 +2294,6 @@ end
 % end
 
 
-
+exportgraphics(gcf,fullfile(pathSave,'NEW_Fig5_clustering.png'),'Resolution',600)
+exportgraphics(gcf,fullfile(pathSave,'NEW_Fig5_clustering.eps'),'Resolution',600)
 

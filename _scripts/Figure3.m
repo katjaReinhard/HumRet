@@ -188,7 +188,7 @@ for g=1:length(order)
     axes('position',[XX(2) YY(g) W(1) H-0.02])
     dat=data(20500:end-2000);
     if ~isempty(find(noresp==g))
-        patch([1:length(dat) length(dat) 1],[dat 0 0],[0.4 0.4 0.4],'edgecolor',[0.4 0.4 0.4])
+        patch([1:length(dat) length(dat) 1],[dat 0 0],[0.7 0.7 0.7],'edgecolor',[0.7 0.7 0.7])
     else
         patch([1:length(dat) length(dat) 1],[dat 0 0],'k','edgecolor','k')
     end
