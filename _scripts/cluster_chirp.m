@@ -3,10 +3,10 @@ close all
 clc
 
 %% pathes
-path1 = 'C:\Users\Katja\OneDrive - imec\HumanRetina\PlosOne';
-path2 = 'C:\Users\Katja\OneDrive - imec\HumRet';
-pathcode = 'C:\Users\katja\OneDrive - imec\HumRet\_scripts';
-pathSave = 'C:\Users\katja\OneDrive - imec\HumanRetina\PlosOne\resubmission';
+path1 = 'C:\Users\Lenovo2020\OneDrive - imec\HumanRetina\PlosOne';
+path2 = 'C:\Users\Lenovo2020\OneDrive - imec\HumRet';
+pathcode = 'C:\Users\Lenovo2020\OneDrive - imec\HumRet\_scripts';
+pathSave = 'C:\Users\Lenovo2020\OneDrive - imec\HumanRetina\PlosOne\resubmission';
 addpath(genpath(pathcode))
 
 recluster = 0;
@@ -25,8 +25,8 @@ recluster = 0;
 % twosec = x(2)-x(1);
 % save(fullfile(path2,'Cowan2020'),'coords','twosec')
 %% stimulus info
-prot=read_header_field_heka(fullfile('C:\Users\Katja\OneDrive - imec\HumRet\data\20130211c\HEKA'),'20130211_C1#0211_HumanPig_FFFlashBW%dur_2000_gap_2000%_FW0ND4.phys','Stimulus Protocol');
-prot2=read_header_field_heka(fullfile('C:\Users\Katja\OneDrive - imec\HumRet\data\20130211c\HEKA'),'20130211_C1#0283_HumanPig_chirp%mean_128_amplitude_128_pause_500%_FW0ND4.phys','Stimulus Protocol');
+prot=read_header_field_heka(fullfile('C:\Users\Lenovo2020\OneDrive - imec\HumRet\data\20130211c\HEKA'),'20130211_C1#0211_HumanPig_FFFlashBW%dur_2000_gap_2000%_FW0ND4.phys','Stimulus Protocol');
+prot2=read_header_field_heka(fullfile('C:\Users\Lenovo2020\OneDrive - imec\HumRet\data\20130211c\HEKA'),'20130211_C1#0283_HumanPig_chirp%mean_128_amplitude_128_pause_500%_FW0ND4.phys','Stimulus Protocol');
 
 %% get spike rates chrp and flash and transiency
 load(fullfile(path2,'h_info'))
@@ -1251,7 +1251,7 @@ for ax = 1:5
     axis off
     set(gca,'xtick',[])
     
-      if ax == 1
+    if ax == 1
         plot([100 100],[20 40],'-k','linewidth',1)
         %          plot([150 1150],[20 20],'-k','linewidth',1)
         text(-400,-0,'20 sp/s','fontname','Arial','fontsize',6,'rotation',90)

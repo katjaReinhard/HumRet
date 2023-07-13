@@ -1,10 +1,14 @@
 clear
 close all
 clc
+% creates list_date_responses, which contains:
+% bar, chrp, chrp_tested,dates,DG,flash,good,good2,idxPerDate,R
 %%
-path1 = 'C:\Users\Katja\OneDrive - imec\HumRet';
-path2 = 'C:\Users\Katja\OneDrive - imec\HumanRGC_processedData';
-load(fullfile(path1,'h_info'))
+% path1 = 'C:\Users\Katja\OneDrive - imec\HumRet';
+% path2 = 'C:\Users\Katja\OneDrive - imec\HumanRGC_processedData';
+path1 = 'D:\_data\all_species';
+speciesnow = 'p';
+load(fullfile(path1,[speciesnow,'_info']))
 %% full-field flash
 
 good=find(goodones==1);
@@ -17,7 +21,7 @@ end
 
 flash = good2;
 %% bar
-load(fullfile(path1,'h_vel6_new_Black'))
+load(fullfile(path1,[speciesnow,'_vel6_new_Black']))
 
 tmp = find(~cellfun(@isempty,vel6_newB));
 bar = tmp;
@@ -52,7 +56,8 @@ for d = 1:length(dates)
     T1 = [T1;length(tmp1) length(tmp2) length(tmp3) length(tmp4) length(tmp5) length(tmp6)];
 end
 
-
+%%
+save(fullfile(path1,[speciesnow,'_list_date_responses']),'bar', 'chrp', 'chrp_tested','dates','DG','flash','good','good2','idxPerDate','R')
 
 
 

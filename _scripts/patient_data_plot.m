@@ -1,5 +1,5 @@
-pathcode = 'C:\Users\katja\OneDrive - imec\HumRet\_scripts';
-pathSave = 'C:\Users\katja\OneDrive - imec\HumanRetina\PlosOne\resubmission';
+pathcode = 'C:\Users\Lenovo2020\OneDrive - imec\HumRet\_scripts';
+pathSave = 'C:\Users\Lenovo2020\OneDrive - imec\HumanRetina\PlosOne\resubmission';
 
 addpath(genpath(pathcode))
 %%
