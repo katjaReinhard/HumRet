@@ -6,15 +6,15 @@ clc
 path1 = 'D:\_data\all_species';
 % path2 = 'C:\Users\Lenovo2020\OneDrive - imec\HumRet';
 path2 = 'D:\_data\Human';
-pathcode = 'C:\Users\Lenovo2020\OneDrive - imec\HumRet\_scripts';
-pathSave = 'C:\Users\Lenovo2020\OneDrive - imec\HumanRetina\NEWPAPER';
+pathcode = 'C:\Users\katja\OneDrive\PhD\CODE\HumRet\_scripts';
+pathSave = 'C:\Users\katja\OneDrive\HUMANRETINA\HumanRetina\NEWPAPER';
 addpath(genpath(pathcode))
 
 recluster = 0;
 
 %% stimulus info
-prot=read_header_field_heka(fullfile('C:\Users\Lenovo2020\OneDrive - imec\HumRet\data\20130211c\HEKA'),'20130211_C1#0211_HumanPig_FFFlashBW%dur_2000_gap_2000%_FW0ND4.phys','Stimulus Protocol');
-prot2=read_header_field_heka(fullfile('C:\Users\Lenovo2020\OneDrive - imec\HumRet\data\20130211c\HEKA'),'20130211_C1#0283_HumanPig_chirp%mean_128_amplitude_128_pause_500%_FW0ND4.phys','Stimulus Protocol');
+prot=read_header_field_heka(fullfile('C:\Users\katja\OneDrive\PhD\CODE\HumRet\data\20130211c\HEKA'),'20130211_C1#0211_HumanPig_FFFlashBW%dur_2000_gap_2000%_FW0ND4.phys','Stimulus Protocol');
+prot2=read_header_field_heka(fullfile('C:\Users\katja\OneDrive\PhD\CODE\HumRet\HumRet\data\20130211c\HEKA'),'20130211_C1#0283_HumanPig_chirp%mean_128_amplitude_128_pause_500%_FW0ND4.phys','Stimulus Protocol');
 
 %% HUMAN: get spike rates chrp and flash and transiency
 load(fullfile(path1,'h_info'))
